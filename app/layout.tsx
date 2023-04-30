@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <div className="h-screen bg-wpp-green.100">{children}</div>
+          <div className="flex h-screen bg-wpp-green.100">{children}</div>
         </Providers>
       </body>
     </html>

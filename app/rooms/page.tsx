@@ -12,11 +12,23 @@ import {
 export default function Rooms() {
   return (
     <>
-      <section className="flex container mx-auto h-full items-center justify-center shadow-lg">
+      <section className="flex container mx-auto h-screen lg:h-[95%] self-center w-full items-center justify-center shadow-lg">
         <div className="flex flex-col flex-1 items-center gap-4 w-full h-full border-r border-gray-400/20">
           <UserTab />
           <SearchBar />
-          <div className="flex flex-col h-full w-full">
+          <div className="flex flex-col h-full w-full overflow-auto">
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
+            <ChatCard />
             <ChatCard />
             <ChatCard />
             <ChatCard />
@@ -25,14 +37,10 @@ export default function Rooms() {
         </div>
         <div className="flex flex-col flex-grow h-full w-full h-full">
           <ChatHeader />
-          <div className="h-full w-full relative">
+          <div className="h-full w-full relative overflow-auto">
             <div className="h-full w-full bg-wpp_chat bg-repeat opacity-5 absolute object-cover -z-9"></div>{" "}
-            <div className="flex flex-col relative z-10 h-full w-full">
-              <div className="flex w-full text-white justify-center pt-3 mb-6">
-                <div className="flex w-30% h-30px text-sm rounded-md bg-gray-800 p-2">
-                  Hoy
-                </div>
-              </div>
+            <div className="flex flex-col relative z-10 h-full w-full overflow-auto">
+              <DateInfo />
               {messages.map((m, idx) => {
                 let prevMessage = messages[idx - 1];
                 let shouldHaveNoCorner = prevMessage
@@ -40,6 +48,7 @@ export default function Rooms() {
                   : true;
                 return (
                   <Message
+                    key={m.id}
                     incoming={m.incoming}
                     message={m.message}
                     from={m.from}
@@ -51,9 +60,26 @@ export default function Rooms() {
               })}
             </div>
           </div>
+          <div className="min-h-[62px] bg-wpp-green.300">
+            <input
+              type="text"
+              placeholder="Escribe un mensaje aquí"
+              className="bg-wpp-darkblue py-2 px-3 rounded-lg text-gray-600 text-sm w-full flex-grow"
+            />
+          </div>
         </div>
       </section>
     </>
+  );
+}
+
+function DateInfo() {
+  return (
+    <div className="flex w-full text-white justify-center pt-3 mb-6">
+      <div className="flex w-30% h-30px text-sm rounded-md bg-gray-800 p-2">
+        Hoy
+      </div>
+    </div>
   );
 }
 
@@ -71,6 +97,10 @@ function Message({
     : "rotate-45 transform origin-top-right";
   let messageCornerPosition = incoming ? "top-0 -left-3" : "top-0 -right-3";
   let borderPos = incoming ? "tl" : "tr";
+  let roundedBorderCorner = prevIsFromOther
+    ? `rounded-${borderPos}-none`
+    : null;
+
   return (
     <div
       className={`flex flex-col ${
@@ -78,14 +108,11 @@ function Message({
       } w-full px-16 ${!prevIsFromOther || isLast ? "mb-4" : "mb-0.5"}`}
     >
       <div
-        className={`max-w-[65%] ${color} text-white px-[9px] pt-[6px] pb-[8px] rounded-lg ${
-          //arreglar esto
-          incoming || prevIsFromOther
-            ? `rounded-${borderPos}-none`
-            : `rounded-${borderPos}-none`
-        } relative shadow-black shadow-sm text-sm font-light`}
+        className={`max-w-[65%] ${color} text-white px-[9px] pt-[6px] pb-[8px] rounded-lg ${roundedBorderCorner} relative shadow-black shadow-sm text-sm font-light`}
       >
-        {incoming && <span>{from}</span>}
+        {incoming && prevIsFromOther && (
+          <h5 className="pl-1 pb-1 text-sm font-thin text-white">{from}</h5>
+        )}
         <span>{message}</span>
         {prevIsFromOther && (
           <div
@@ -94,7 +121,7 @@ function Message({
             <div className={` h-5 ${color} ${messageCornerProps}`}></div>
           </div>
         )}
-        <div className="text-xs font-thin absolute bottom-0.5 right-3">
+        <div className="text-xs font-thin absolute bottom-0.5 right-3 rounded-tl">
           <span>{timeStamp}</span>
         </div>
       </div>
@@ -139,7 +166,7 @@ function SearchBar() {
 
 function ChatCard() {
   return (
-    <div className="flex text-white items-center justify-start max-w-md h-[72px] relative border-t border-gray-400/20">
+    <div className="flex text-white items-center justify-start max-w-md min-h-[72px] relative border-t border-gray-400/20">
       <div className="px-[15px]">
         <Image
           src="https://images.pexels.com/photos/2589653/pexels-photo-2589653.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
