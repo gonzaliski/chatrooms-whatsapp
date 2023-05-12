@@ -1,16 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { userService } from "@/services/userService";
 
-export interface UserState {
-  email: string;
-  token: string;
-}
+const initialState = userService.getUserCredentialsFromLS() || {
+  email: "",
+  token: "",
+  id: "",
+};
 
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    email: "",
-    token: "",
-  },
+  initialState: initialState as UserState,
   reducers: {
     addUserEmail(state, action) {
       state.email = action.payload.email;
@@ -18,8 +17,11 @@ const userSlice = createSlice({
     addUserToken(state, action) {
       state.token = action.payload.token;
     },
+    addUserId(state, action) {
+      state.id = action.payload.id;
+    },
   },
 });
 
-export const { addUserEmail, addUserToken } = userSlice.actions;
+export const { addUserEmail, addUserToken, addUserId } = userSlice.actions;
 export default userSlice.reducer;

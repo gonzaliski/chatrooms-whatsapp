@@ -20,6 +20,7 @@ module.exports = {
         "wpp-primary": "#00a884",
         "outgoing-bg": "#005c4b",
         "incoming-bg": "#202c33",
+        "conversation-panel": "#0b141a",
       },
     },
   },

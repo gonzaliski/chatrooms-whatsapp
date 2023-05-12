@@ -1,5 +1,9 @@
 "use client";
-import { addUserEmail } from "@/redux/slices/userSlice";
+import {
+  addUserEmail,
+  addUserToken,
+  addUserId,
+} from "@/redux/slices/userSlice";
 import { userService } from "@/services/userService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,7 +27,12 @@ export const LoginForm = () => {
   const handleCodeSubmit = async (e: any) => {
     e.preventDefault();
     console.log(email);
-    await userService.getToken(e.target.code.value, email);
+    const { token, userId } = await userService.getToken(
+      e.target.code.value,
+      email
+    );
+    dispatch(addUserToken({ token }));
+    dispatch(addUserId({ id: userId }));
     router.push("/rooms");
   };
 
