@@ -23,6 +23,15 @@ class RoomService {
       throw e;
     }
   }
+  async pushMessage() {
+    try {
+      await axios.post(`${API_BASE_URL}/messages`, {
+        params: { userId: this.userId },
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
 export const roomService = new RoomService();

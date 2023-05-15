@@ -1,15 +1,12 @@
 import { ChatCardList } from "@/components/ChatCardList";
-import { ConversationInput } from "@/components/ConversationInput";
+import { ConversationFooter } from "@/components/ConversationFooter";
 import { ConversationPanel } from "@/components/ConversationPanel";
-import { messages } from "@/utils/mocks";
 import Image from "next/image";
-import { BsEmojiSmile } from "react-icons/bs";
-import { HiMicrophone, HiOutlineDotsVertical } from "react-icons/hi";
+import { HiOutlineDotsVertical } from "react-icons/hi";
 import {
   MdChat,
   MdFilterList,
   MdGroups,
-  MdOutlineAttachFile,
   MdOutlineCircle,
   MdOutlineSearch,
 } from "react-icons/md";
@@ -26,22 +23,7 @@ export default function Rooms() {
         <div className="flex flex-col flex-grow h-full w-full h-full">
           <ChatHeader />
           <ConversationPanel />
-          <div className="inline-table min-h-[62px] bg-wpp-green.300 px-4 py-1">
-            <div className="flex items-center w-full">
-              <div className="flex min-h-[52px] gap-3 py-1 px-2">
-                <div className="flex  items-center">
-                  <BsEmojiSmile className="text-gray-400 text-2xl" />
-                </div>
-                <div className="flex items-center">
-                  <MdOutlineAttachFile className="text-gray-400 text-2xl rotate-45" />
-                </div>
-              </div>
-              <ConversationInput />
-              <div className="flex min-h-[52px] items-center py-1">
-                <HiMicrophone className="text-gray-400 text-2xl" />
-              </div>
-            </div>
-          </div>
+          <ConversationFooter />
         </div>
       </section>
     </>

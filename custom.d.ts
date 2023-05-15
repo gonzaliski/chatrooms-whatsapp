@@ -2,7 +2,7 @@ type Message = {
   incoming: boolean;
   message: string;
   from: string;
-  timeStamp: string;
+  timeStamp: any;
   prevIsFromOther: boolean;
   isLast: boolean;
 };
@@ -32,6 +32,9 @@ interface UserState {
   email: string;
   token: string;
   id: string;
+}
+interface userState {
+  user: UserState;
 }
 type RoomSelection = {
   roomId: string;
