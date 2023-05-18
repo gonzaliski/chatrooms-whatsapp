@@ -6,7 +6,13 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { HiMicrophone } from "react-icons/hi";
 import { MdOutlineAttachFile } from "react-icons/md";
 
-export const ConversationFooter = () => {
+export const ConversationFooter = ({
+  shortId,
+  userId,
+}: {
+  shortId: string;
+  userId: string;
+}) => {
   const [value, setValue] = useState("");
   const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = evt.target?.value;

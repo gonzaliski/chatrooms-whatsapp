@@ -1,3 +1,4 @@
+import { store } from "@/redux/store";
 import { API_BASE_URL } from "@/utils/constants";
 import axios from "axios";
 
@@ -5,10 +6,9 @@ class RoomService {
   userId: string;
   token: string;
   constructor() {
-    const { token, userId } = JSON.parse(
-      localStorage.getItem("userCredentials") || ""
-    );
-    this.userId = userId;
+    const currentState = store.getState();
+    const { token, id } = currentState.user;
+    this.userId = id;
     this.token = token;
   }
   async getRooms() {
@@ -26,6 +26,29 @@ class RoomService {
   async pushMessage() {
     try {
       await axios.post(`${API_BASE_URL}/messages`, {
+        params: { userId: this.userId },
+      });
+    } catch (e) {
+      throw e;
+    }
+  }
+  async createRoom(name: string) {
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/rooms`,
+        { name },
+        {
+          params: { userId: this.userId },
+        }
+      );
+      return res.data;
+    } catch (e) {
+      throw e;
+    }
+  }
+  async joinRoom(code: string) {
+    try {
+      await axios.get(`${API_BASE_URL}/rooms/${code}`, {
         params: { userId: this.userId },
       });
     } catch (e) {

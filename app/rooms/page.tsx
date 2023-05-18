@@ -1,6 +1,5 @@
 import { ChatCardList } from "@/components/ChatCardList";
-import { ConversationFooter } from "@/components/ConversationFooter";
-import { ConversationPanel } from "@/components/ConversationPanel";
+import { RoomPanel } from "@/components/RoomPanel";
 import Image from "next/image";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import {
@@ -20,11 +19,7 @@ export default function Rooms() {
           <SearchBar />
           <ChatCardList />
         </div>
-        <div className="flex flex-col flex-grow h-full w-full h-full">
-          <ChatHeader />
-          <ConversationPanel />
-          <ConversationFooter />
-        </div>
+        <RoomPanel />
       </section>
     </>
   );
@@ -61,32 +56,6 @@ function SearchBar() {
         <MdOutlineSearch className="text-gray-400 text-xl absolute top-1/4 left-4" />
       </div>
       <MdFilterList className="text-gray-400 text-xl top-1/4 left-4 mx-2" />
-    </div>
-  );
-}
-
-function ChatHeader() {
-  return (
-    <div className="flex items-center justify-between w-full bg-wpp-green.300 px-4 py-[10px] ml-[2px]">
-      <div className="flex gap-2 items-center w-full">
-        <Image
-          src="https://images.pexels.com/photos/2589653/pexels-photo-2589653.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-          className="inline object-cover w-[40px] h-[40px] rounded-full max-w-none"
-          width="100"
-          height="100"
-          alt="Profile image"
-        />
-        <div className="flex flex-col flex-grow">
-          <span className="text-md text-white font-sans">Nombre Chat</span>
-          <span className="text-xs truncate flex-grow text-white font-sans">
-            Pepito, fulano, mengano, fulana, mengana, roberto
-          </span>
-        </div>
-        <div className="flex flex-shrink gap-7 pr-3">
-          <MdOutlineSearch className="text-gray-400 text-2xl  top-1/4 left-4" />
-          <HiOutlineDotsVertical className="text-gray-400 text-2xl" />
-        </div>
-      </div>
     </div>
   );
 }

@@ -22,10 +22,12 @@ type ChatCard = {
 };
 
 type ChatCardProps = {
+  shortId: string;
   id: string;
   name: string;
   lastMessage: string;
   timeStamp: any;
+  selected: boolean;
   onSelect: (a: RoomSelection) => any;
 };
 interface UserState {
@@ -37,6 +39,10 @@ interface userState {
   user: UserState;
 }
 type RoomSelection = {
+  shortId: string;
   roomId: string;
   name: string;
 };
+interface chatState {
+  chat: RoomSelection;
+}

@@ -3,22 +3,22 @@ import { rtdb } from "@/firebase";
 import { onValue, ref } from "firebase/database";
 import { Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-interface chatState {
-  chat: RoomSelection;
-}
-
-export const ConversationPanel = () => {
-  const { roomId, name } = useSelector((state: chatState) => state.chat);
-  const { id } = useSelector((state: userState) => state.user);
-
+export const ConversationPanel = ({
+  roomId,
+  id,
+}: {
+  roomId: string;
+  id: string;
+}) => {
   const [messages, setMessages] = useState([] as any);
+
   useEffect(() => {
     const listenChat = onValue(ref(rtdb, "/rooms/" + roomId), (snapshot) => {
-      console.log(snapshot.val().messages);
-
-      setMessages(Object.entries(snapshot.val()?.messages));
+      console.log("messages", snapshot.val());
+      let currentMessages =
+        snapshot.val() && Object.entries(snapshot.val()?.messages);
+      setMessages(currentMessages);
     });
     return () => {
       // Detiene la escucha de cambios
