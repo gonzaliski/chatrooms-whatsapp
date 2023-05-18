@@ -5,9 +5,11 @@ import { Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export const ConversationPanel = ({
+  shortId,
   roomId,
   id,
 }: {
+  shortId: string;
   roomId: string;
   id: string;
 }) => {
@@ -29,35 +31,34 @@ export const ConversationPanel = ({
     <div className="h-full w-full relative overflow-auto bg-conversation-panel">
       <div className="h-full w-full bg-wpp_chat bg-repeat opacity-5 absolute object-cover -z-9"></div>{" "}
       <div className="flex flex-col relative z-10 h-full w-full overflow-auto">
-        <DateInfo />
-        {messages?.map((m: any, idx: any) => {
-          let prevMessage = idx > 0 ? messages[idx - 1] : null;
-          let nextMessage = messages[idx + 1];
-          let shouldHaveNoCorner = prevMessage
-            ? prevMessage[1].id !== m[1].id
-            : true;
-          return (
-            <Message
-              key={m[0]}
-              incoming={m[1].id !== id}
-              message={m[1].message}
-              from={m[1].name}
-              timeStamp={m[1].timeStamp}
-              prevIsFromOther={shouldHaveNoCorner}
-              isLast={nextMessage == undefined || nextMessage[1].id !== m[1].id}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-const DateInfo = () => {
-  return (
-    <div className="flex w-full text-white justify-center pt-3 mb-6">
-      <div className="flex w-30% h-30px text-sm rounded-md bg-gray-800 p-2">
-        Hoy
+        <span className="w-full h-14" />
+        {messages ? (
+          messages?.map((m: any, idx: any) => {
+            let prevMessage = idx > 0 ? messages[idx - 1] : null;
+            let nextMessage = messages[idx + 1];
+            let shouldHaveNoCorner = prevMessage
+              ? prevMessage[1].id !== m[1].id
+              : true;
+            return (
+              <Message
+                key={m[0]}
+                incoming={m[1].id !== id}
+                message={m[1].message}
+                from={m[1].name}
+                timeStamp={m[1].timeStamp}
+                prevIsFromOther={shouldHaveNoCorner}
+                isLast={
+                  nextMessage == undefined || nextMessage[1].id !== m[1].id
+                }
+              />
+            );
+          })
+        ) : (
+          <h2 className="text-white text-center font-thin text-xl sm:text-2xl md:text-3xl">
+            {" "}
+            Compartí el código <b>{shortId}</b> para empezar a chatear
+          </h2>
+        )}
       </div>
     </div>
   );

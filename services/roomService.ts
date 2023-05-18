@@ -48,9 +48,13 @@ class RoomService {
   }
   async joinRoom(code: string) {
     try {
-      await axios.get(`${API_BASE_URL}/rooms/${code}`, {
-        params: { userId: this.userId },
-      });
+      const res = await axios.get(
+        `${API_BASE_URL}/rooms/${code.toUpperCase()}`,
+        {
+          params: { userId: this.userId },
+        }
+      );
+      return res.data;
     } catch (e) {
       throw e;
     }

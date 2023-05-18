@@ -11,12 +11,10 @@ export const RoomPanel = () => {
     (state: chatState) => state.chat
   );
   const { id } = useSelector((state: userState) => state.user);
-  console.log(shortId, roomId, name);
-
   return (
     <div className="flex flex-col flex-grow h-full w-full h-full">
       <ChatHeader name={name} />
-      <ConversationPanel roomId={roomId} id={id} />
+      <ConversationPanel roomId={roomId} id={id} shortId={shortId} />
       <ConversationFooter shortId={shortId} userId={id} />
     </div>
   );

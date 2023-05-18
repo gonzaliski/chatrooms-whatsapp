@@ -13,8 +13,6 @@ export const ChatCardList = () => {
   const [rooms, setRooms] = useState([] as any);
   const dispatch = useDispatch();
   const handleSelect = (room: RoomSelection) => {
-    console.log(rooms[room.roomId]);
-
     setSelected(room.roomId);
     dispatch(selectChat(room));
   };
@@ -22,7 +20,6 @@ export const ChatCardList = () => {
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(collection(db, "usersChat"), id), (doc) => {
-        console.log("xd", doc.data());
         setRooms(doc.data());
       });
       return () => {

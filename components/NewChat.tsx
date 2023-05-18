@@ -3,18 +3,19 @@ import { MdClear, MdAdd, MdOutlineKeyboardBackspace } from "react-icons/md";
 import { Modal } from "./Modal";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { roomService } from "@/services/roomService";
+import { ErrorCard } from "./ErrorCard";
 
 export const NewChat = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [joinEnabled, setJoinEnabled] = useState(false);
   const [createEnabled, setCreateEnabled] = useState(false);
   const [value, setValue] = useState("");
+  const [error, setError] = useState("");
   const handleCreateRoom = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await roomService.createRoom(value);
-      console.log(res);
-      alert("Room creado");
+      await roomService.createRoom(value);
+      onClose();
     } catch (e) {
       console.error(e);
     }
@@ -22,16 +23,16 @@ export const NewChat = () => {
   const handleJoinRoom = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const res = await roomService.joinRoom(value);
-      console.log(res);
-      alert("Room creado");
-    } catch (e) {
-      console.error(e);
+      await roomService.joinRoom(value);
+      onClose();
+    } catch (e: any) {
+      setError(e.response.data.message);
     }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
+    setError("");
   };
   const handleJoinChat = () => {
     setJoinEnabled(true);
@@ -44,11 +45,12 @@ export const NewChat = () => {
   const disableAll = () => {
     setJoinEnabled(false);
     setCreateEnabled(false);
+    setValue("");
+    setError("");
   };
   const onClose = () => {
     setIsOpen(false);
     disableAll();
-    setValue("");
   };
   return (
     <>
@@ -56,7 +58,7 @@ export const NewChat = () => {
         <section className="flex flex-col items-center justify-center gap-10 min-w-1/4 w-1/4 h-1/2 py-4 px-6 bg-wpp-green.100 rounded-2xl">
           <h2 className="text-white text-center font-thin text-sm sm:text-lg md:text-2xl">
             {!joinEnabled && !createEnabled
-              ? "Crea un nuevo chat o únete a uno!"
+              ? "Creá un nuevo chat o unite a uno!"
               : createEnabled
               ? "Crear nuevo chat"
               : "Unirse a un chat"}
@@ -93,6 +95,7 @@ export const NewChat = () => {
                     Crear
                   </button>
                 </div>
+                {error && <ErrorCard msg={error} />}
               </form>
             )}
             {!joinEnabled && !createEnabled && (
@@ -108,21 +111,20 @@ export const NewChat = () => {
                 <label htmlFor="roomCode" className="text-gray-400 text-sm">
                   Código del room
                 </label>
-                <input
-                  type="text"
-                  name="roomCode"
-                  onChange={handleChange}
-                  value={value}
-                  placeholder="Nuevo grupo"
-                  className="p-1 focus:outline-none rounded-md rounded-tr-none rounded-br-none text-white bg-wpp-darkblue"
-                ></input>
-                <button
-                  className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1"
-                  type="button"
-                  onClick={handleCreateRoom}
-                >
-                  Unirse
-                </button>
+                <div className="flex w-full">
+                  <input
+                    type="text"
+                    name="roomCode"
+                    onChange={handleChange}
+                    value={value.toUpperCase()}
+                    placeholder="e.g AS456"
+                    className="p-1 focus:outline-none rounded-md rounded-tr-none rounded-br-none text-white bg-wpp-darkblue"
+                  ></input>
+                  <button className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1">
+                    Unirse
+                  </button>
+                </div>
+                {error && <ErrorCard msg={error} />}
               </MainForm>
             )}
           </div>
@@ -173,7 +175,7 @@ const MainForm = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <form onSubmit={onSubmit} className="container w-full">
+    <form onSubmit={onSubmit} className="flex flex-col w-full gap-4">
       {children}
     </form>
   );

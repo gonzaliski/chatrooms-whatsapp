@@ -14,7 +14,7 @@ export default function Rooms() {
   return (
     <>
       <section className="flex container mx-auto h-screen lg:h-[95%] self-center w-full items-center justify-center shadow-lg">
-        <div className="flex flex-col flex-1 items-center w-full h-full border-r border-gray-400/20 min-w-[25%]">
+        <div className="flex flex-col flex-1 items-center w-full h-full border-r border-gray-400/20 min-w-[30%]">
           <UserTab />
           <SearchBar />
           <ChatCardList />
