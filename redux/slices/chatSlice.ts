@@ -4,7 +4,8 @@ const initialState = {
   shortId: "",
   roomId: "",
   name: "",
-};
+  participants: [],
+} as RoomSelection;
 
 const chatSlice = createSlice({
   name: "chat",
@@ -14,6 +15,7 @@ const chatSlice = createSlice({
       state.name = action.payload.name;
       state.roomId = action.payload.roomId;
       state.shortId = action.payload.shortId;
+      state.participants = action.payload.participants;
     },
   },
 });

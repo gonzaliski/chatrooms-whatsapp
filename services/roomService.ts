@@ -5,11 +5,13 @@ import axios from "axios";
 class RoomService {
   userId: string;
   token: string;
+  name: string;
   constructor() {
     const currentState = store.getState();
-    const { token, id } = currentState.user;
+    const { token, id, name } = currentState.user;
     this.userId = id;
     this.token = token;
+    this.name = name;
   }
   async getRooms() {
     try {
@@ -23,11 +25,27 @@ class RoomService {
       throw e;
     }
   }
-  async pushMessage() {
+  async pushMessage(
+    message: string,
+    participants: participant[],
+    roomId: string
+  ) {
+    let body = {
+      roomData: {
+        id: roomId,
+        participants: participants,
+      },
+      name: this.name,
+      message,
+    };
     try {
-      await axios.post(`${API_BASE_URL}/messages`, {
-        params: { userId: this.userId },
-      });
+      await axios.post(
+        `${API_BASE_URL}/messages`,
+        { ...body },
+        {
+          params: { userId: this.userId },
+        }
+      );
     } catch (e) {
       throw e;
     }

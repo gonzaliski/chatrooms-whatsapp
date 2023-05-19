@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useSelector } from "react-redux";
 
 export const RoomPanel = () => {
-  const { shortId, roomId, name } = useSelector(
+  const { shortId, roomId, name, participants } = useSelector(
     (state: chatState) => state.chat
   );
   const { id } = useSelector((state: userState) => state.user);
@@ -15,7 +15,7 @@ export const RoomPanel = () => {
     <div className="flex flex-col flex-grow h-full w-full h-full">
       <ChatHeader name={name} />
       <ConversationPanel roomId={roomId} id={id} shortId={shortId} />
-      <ConversationFooter shortId={shortId} userId={id} />
+      <ConversationFooter shortId={shortId} participants={participants} />
     </div>
   );
 };

@@ -4,12 +4,21 @@ import axios from "axios";
 class UserService {
   getUserCredentialsFromLS() {
     if (typeof window !== "undefined") {
-      return JSON.parse(localStorage.getItem("userCredentials") || "");
+      const userCredentials = localStorage.getItem("userCredentials");
+      const parsedCredentials = userCredentials
+        ? JSON.parse(userCredentials)
+        : null;
+      return parsedCredentials;
     }
   }
   saveUserCredentialsOnLS(data: LSUserCredentials) {
     if (typeof window !== "undefined") {
       localStorage.setItem("userCredentials", JSON.stringify(data));
+    }
+  }
+  removeUserCredentialsOnLS() {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("userCredentials");
     }
   }
   async sendCode(email: string) {

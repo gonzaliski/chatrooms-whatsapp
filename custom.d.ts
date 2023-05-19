@@ -24,6 +24,7 @@ type ChatCard = {
 type ChatCardProps = {
   shortId: string;
   id: string;
+  participants: participant[];
   name: string;
   lastMessage: string;
   timeStamp: any;
@@ -32,16 +33,22 @@ type ChatCardProps = {
 };
 interface UserState {
   email: string;
+  name: string;
   token: string;
   id: string;
 }
 interface userState {
   user: UserState;
 }
+type participant = {
+  userId: string;
+  name: string;
+};
 type RoomSelection = {
   shortId: string;
   roomId: string;
   name: string;
+  participants: participant[];
 };
 interface chatState {
   chat: RoomSelection;

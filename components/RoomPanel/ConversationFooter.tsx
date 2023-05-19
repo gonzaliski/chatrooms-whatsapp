@@ -1,5 +1,5 @@
 "use client";
-import { ConversationInput } from "@/components/ConversationInput";
+import { ConversationInput } from "@/components/RoomPanel/ConversationInput";
 import { roomService } from "@/services/roomService";
 import { FormEvent, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -8,10 +8,10 @@ import { MdOutlineAttachFile } from "react-icons/md";
 
 export const ConversationFooter = ({
   shortId,
-  userId,
+  participants,
 }: {
   shortId: string;
-  userId: string;
+  participants: participant[];
 }) => {
   const [value, setValue] = useState("");
   const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -22,7 +22,7 @@ export const ConversationFooter = ({
   const pushMessage = async (e: FormEvent) => {
     e.preventDefault();
     //TODO
-    await roomService.pushMessage();
+    await roomService.pushMessage(value, participants, shortId);
   };
 
   return (

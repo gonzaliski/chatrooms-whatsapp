@@ -1,9 +1,9 @@
 "use client";
 import { MdClear, MdAdd, MdOutlineKeyboardBackspace } from "react-icons/md";
-import { Modal } from "./Modal";
+import { Modal } from "../Modal";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { roomService } from "@/services/roomService";
-import { ErrorCard } from "./ErrorCard";
+import { ErrorCard } from "../ErrorCard";
 
 export const NewChat = () => {
   const [modalIsOpen, setIsOpen] = useState(false);

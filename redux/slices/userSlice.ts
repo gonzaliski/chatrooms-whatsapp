@@ -5,6 +5,7 @@ const initialState = userService.getUserCredentialsFromLS() || {
   email: "",
   token: "",
   id: "",
+  name: "",
 };
 
 const userSlice = createSlice({
@@ -20,8 +21,10 @@ const userSlice = createSlice({
     addUserId(state, action) {
       state.id = action.payload.id;
     },
+    logOut: () => initialState,
   },
 });
 
-export const { addUserEmail, addUserToken, addUserId } = userSlice.actions;
+export const { addUserEmail, addUserToken, addUserId, logOut } =
+  userSlice.actions;
 export default userSlice.reducer;

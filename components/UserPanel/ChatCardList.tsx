@@ -4,8 +4,8 @@ import { selectChat } from "@/redux/slices/chatSlice";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatCard } from "./ChatCard";
-import { NewChat } from "./NewChat";
+import { ChatCard } from "../RoomPanel/ChatCard";
+import { NewChat } from "../RoomPanel/NewChat";
 
 export const ChatCardList = () => {
   const [selected, setSelected] = useState("");
@@ -35,6 +35,7 @@ export const ChatCardList = () => {
       {Object.entries(rooms)?.map((room: any) => (
         <ChatCard
           key={room[0]}
+          participants={room[1].participants}
           shortId={room[1].roomShortId}
           id={room[0]}
           name={room[1].roomName}

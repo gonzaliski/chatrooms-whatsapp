@@ -3,6 +3,7 @@ import Image from "next/image";
 export const ChatCard = ({
   id,
   shortId,
+  participants,
   name,
   lastMessage,
   timeStamp,
@@ -14,7 +15,7 @@ export const ChatCard = ({
     <div
       className={`flex text-white justify-start max-w-md min-h-[72px] relative cursor-pointer hover:bg-wpp-darkblue
        ${selected ? "bg-wpp-darkblue pointer-events-none" : ""}`}
-      onClick={() => onSelect({ shortId, roomId: id, name })}
+      onClick={() => onSelect({ shortId, roomId: id, name, participants })}
     >
       <div className="px-[15px]">
         <Image
