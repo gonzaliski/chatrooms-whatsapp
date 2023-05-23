@@ -10,7 +10,7 @@ export const ChatCard = ({
   selected,
   onSelect,
 }: ChatCardProps) => {
-  let timeStampDate = timeStamp.toDate();
+  let timeStampDate = timeStamp?.toDate();
   return (
     <div
       className={`flex text-white justify-start max-w-md min-h-[72px] relative cursor-pointer hover:bg-wpp-darkblue
@@ -33,10 +33,11 @@ export const ChatCard = ({
         </span>
       </div>
       <span className="text-xs text-gray-400 absolute top-4 right-5">
-        {timeStampDate.getHours() +
-          ":" +
-          ((timeStampDate.getMinutes() < 10 ? "0" : "") +
-            timeStampDate.getMinutes())}
+        {timeStampDate &&
+          timeStampDate.getHours() +
+            ":" +
+            ((timeStampDate.getMinutes() < 10 ? "0" : "") +
+              timeStampDate.getMinutes())}
       </span>
     </div>
   );

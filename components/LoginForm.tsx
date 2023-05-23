@@ -1,9 +1,5 @@
 "use client";
-import {
-  addUserEmail,
-  addUserToken,
-  addUserId,
-} from "@/redux/slices/userSlice";
+import { addUserData, addUserEmail } from "@/redux/slices/userSlice";
 import { userService } from "@/services/userService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,24 +11,32 @@ export const LoginForm = () => {
   const [nextStep, setNextStep] = useState(false);
   const [title, setTitle] = useState("Ingresá tu email para comenzar");
   const [email, setEmail] = useState("");
+  const [newUser, setNewUser] = useState(false);
   const handleEmailSubmit = async (e: any) => {
     e.preventDefault();
     let email = e.target.email.value;
     setEmail(email);
     dispatch(addUserEmail({ email }));
-    const res = await userService.sendCode(email);
+    const [res, status] = await userService.sendCode(email);
+    console.log(status);
+
+    if (status == 201) setNewUser(true);
     setTitle(res);
     setNextStep(true);
   };
   const handleCodeSubmit = async (e: any) => {
     e.preventDefault();
-    console.log(email);
-    const { token, userId } = await userService.getToken(
+    const { token, userId, name } = await userService.getToken(
       e.target.code.value,
       email
     );
-    dispatch(addUserToken({ token }));
-    dispatch(addUserId({ id: userId }));
+    if (newUser) {
+      console.log("es nuevo");
+
+      dispatch(addUserData({ token, userId }));
+      return router.push("/user");
+    }
+    dispatch(addUserData({ token, userId, name }));
     router.push("/rooms");
   };
 

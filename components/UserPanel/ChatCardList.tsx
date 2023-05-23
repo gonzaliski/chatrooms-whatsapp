@@ -3,13 +3,12 @@ import { db } from "@/firebase";
 import { selectChat } from "@/redux/slices/chatSlice";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ChatCard } from "../RoomPanel/ChatCard";
-import { NewChat } from "../RoomPanel/NewChat";
+import { useDispatch } from "react-redux";
+import { ChatCard } from "./ChatCard";
+import { NewChat } from "./NewChat";
 
-export const ChatCardList = () => {
+export const ChatCardList = ({ id }: { id: string }) => {
   const [selected, setSelected] = useState("");
-  const { id } = useSelector((state: userState) => state.user);
   const [rooms, setRooms] = useState([] as any);
   const dispatch = useDispatch();
   const handleSelect = (room: RoomSelection) => {
@@ -20,7 +19,10 @@ export const ChatCardList = () => {
   useEffect(() => {
     const getChats = () => {
       const unsub = onSnapshot(doc(collection(db, "usersChat"), id), (doc) => {
-        setRooms(doc.data());
+        let data = doc.data();
+        let chats = data && Object.entries(data);
+        console.log(chats);
+        setRooms(chats);
       });
       return () => {
         unsub();
@@ -32,19 +34,22 @@ export const ChatCardList = () => {
   return (
     <div className="flex flex-col h-full w-full overflow-auto pr-1">
       <NewChat />
-      {Object.entries(rooms)?.map((room: any) => (
-        <ChatCard
-          key={room[0]}
-          participants={room[1].participants}
-          shortId={room[1].roomShortId}
-          id={room[0]}
-          name={room[1].roomName}
-          lastMessage={room[1].lastMessage}
-          timeStamp={room[1].timeStamp}
-          onSelect={handleSelect}
-          selected={selected == room[0] ? true : false}
-        />
-      ))}
+      {rooms?.length > 0 &&
+        rooms
+          ?.sort((a: Room, b: Room) => b[1].timeStamp - a[1].timeStamp)
+          .map((room: Room) => (
+            <ChatCard
+              key={room[0]}
+              participants={room[1].participants}
+              shortId={room[1].roomShortId}
+              id={room[0]}
+              name={room[1].roomName}
+              lastMessage={room[1].lastMessage}
+              timeStamp={room[1].timeStamp}
+              onSelect={handleSelect}
+              selected={selected == room[0] ? true : false}
+            />
+          ))}
     </div>
   );
 };

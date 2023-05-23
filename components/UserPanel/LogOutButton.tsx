@@ -15,7 +15,7 @@ export const LogOutButton = () => {
   };
   return (
     <MdOutlineLogout
-      className="text-gray-400 text-2xl"
+      className="text-gray-400 text-2xl cursor-pointer hover:brightness-200"
       onClick={handleLogOut}
     />
   );

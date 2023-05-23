@@ -1,13 +1,18 @@
+"use client";
 import { MdOutlineSearch, MdFilterList } from "react-icons/md";
 import { ChatCardList } from "./ChatCardList";
 import { UserTab } from "./UserTab";
+import { useSelector } from "react-redux";
+import { userSelector } from "@/redux/selectors";
 
 export const UserPanel = () => {
+  const { id } = useSelector(userSelector);
+
   return (
     <div className="flex flex-col flex-1 items-center w-full h-full border-r border-gray-400/20 min-w-[30%]">
       <UserTab />
       <SearchBar />
-      <ChatCardList />
+      <ChatCardList id={id} />
     </div>
   );
 };

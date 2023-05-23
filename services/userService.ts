@@ -1,3 +1,4 @@
+import { store } from "@/redux/store";
 import { API_BASE_URL } from "@/utils/constants";
 import axios from "axios";
 
@@ -24,23 +25,39 @@ class UserService {
   async sendCode(email: string) {
     try {
       const res = await axios.post(`${API_BASE_URL}/auth`, { email });
-      return res.data.message;
+      return [res.data.message, res.status];
     } catch (e) {
       throw e;
     }
   }
 
   async getToken(code: string, email: string) {
+    console.log(code, email);
     try {
       const res = await axios.post(`${API_BASE_URL}/auth/token`, {
         code,
         email,
       });
-      console.log(res);
       this.saveUserCredentialsOnLS({
         token: res.data.token,
         id: res.data.userId,
+        name: res.data.name,
       });
+      return res.data;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async updateUser(name: string, id: string) {
+    try {
+      const res = await axios.put(
+        `${API_BASE_URL}/user`,
+        {
+          name,
+        },
+        { params: { userId: id } }
+      );
       return res.data;
     } catch (e) {
       throw e;

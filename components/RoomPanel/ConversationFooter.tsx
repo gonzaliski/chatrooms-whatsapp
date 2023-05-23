@@ -3,8 +3,7 @@ import { ConversationInput } from "@/components/RoomPanel/ConversationInput";
 import { roomService } from "@/services/roomService";
 import { FormEvent, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import { HiMicrophone } from "react-icons/hi";
-import { MdOutlineAttachFile } from "react-icons/md";
+import { MdOutlineAttachFile, MdSend } from "react-icons/md";
 
 export const ConversationFooter = ({
   shortId,
@@ -21,8 +20,10 @@ export const ConversationFooter = ({
 
   const pushMessage = async (e: FormEvent) => {
     e.preventDefault();
-    //TODO
-    await roomService.pushMessage(value, participants, shortId);
+    if (value) {
+      await roomService.pushMessage(value, participants, shortId);
+      setValue("");
+    }
   };
 
   return (
@@ -37,10 +38,19 @@ export const ConversationFooter = ({
           </div>
         </div>
         <form className="flex flex-center w-full" onSubmit={pushMessage}>
-          <ConversationInput value={value} onFill={handleChange} />
+          <ConversationInput
+            value={value}
+            onFill={handleChange}
+            onEnter={pushMessage}
+          />
         </form>
         <div className="flex min-h-[52px] items-center py-1">
-          <HiMicrophone className="text-gray-400 text-2xl" />
+          <MdSend
+            className={`text-gray-400 text-2xl ${
+              value ? "cursor-pointer" : "pointer-events-none"
+            } hover:brightness-300`}
+            onClick={pushMessage}
+          />
         </div>
       </div>
     </div>

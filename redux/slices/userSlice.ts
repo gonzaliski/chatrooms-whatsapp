@@ -15,16 +15,15 @@ const userSlice = createSlice({
     addUserEmail(state, action) {
       state.email = action.payload.email;
     },
-    addUserToken(state, action) {
-      state.token = action.payload.token;
-    },
-    addUserId(state, action) {
-      state.id = action.payload.id;
+    addUserData(state, action) {
+      state = {
+        ...state,
+        ...action.payload,
+      };
     },
     logOut: () => initialState,
   },
 });
 
-export const { addUserEmail, addUserToken, addUserId, logOut } =
-  userSlice.actions;
+export const { addUserEmail, addUserData, logOut } = userSlice.actions;
 export default userSlice.reducer;

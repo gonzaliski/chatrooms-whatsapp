@@ -10,6 +10,7 @@ type Message = {
 type LSUserCredentials = {
   token: string;
   id: string;
+  name: string;
 };
 
 type ChatCardListProps = ChatCard[];
@@ -18,6 +19,7 @@ type ChatCard = {
   lastMessage: string;
   id: string;
   timeStamp: string;
+  participant: participant[];
   name: string;
 };
 
@@ -53,3 +55,14 @@ type RoomSelection = {
 interface chatState {
   chat: RoomSelection;
 }
+
+type Room = [
+  string,
+  {
+    participants: participant[];
+    roomShortId: string;
+    roomName: string;
+    lastMessage: string;
+    timeStamp: any;
+  }
+];

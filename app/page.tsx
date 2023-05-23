@@ -13,7 +13,7 @@ export default function Home() {
           <Image
             src={AppLogo}
             alt={"AppLogo"}
-            className="inline w-[120px] sm:w-1/4 md:1/2"
+            className="animate-popup inline w-[120px] sm:w-1/4 md:1/2"
           />
         </div>
         <h2 className="text-white font-thin text-md sm:text-lg md:text-xl">
