@@ -86,7 +86,7 @@ const Message = ({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    incoming && ref.current?.scrollIntoView({ behavior: "smooth" });
+    !incoming && ref.current?.scrollIntoView({ behavior: "auto" });
   }, [incoming]);
   return (
     <div

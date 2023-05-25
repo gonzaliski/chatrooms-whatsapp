@@ -23,6 +23,7 @@ module.exports = {
       colors: {
         "wpp-green.100": "#111b21",
         "wpp-green.300": "#202c33",
+        "wpp-green.300-darker": "##101a20",
         "wpp-darkblue": "#2A3942",
         "wpp-primary": "#00a884",
         "outgoing-bg": "#005c4b",

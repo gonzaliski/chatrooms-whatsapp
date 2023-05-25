@@ -55,6 +55,9 @@ type RoomSelection = {
 interface chatState {
   chat: RoomSelection;
 }
+interface imageState {
+  image: { file: string; pendingToSend: boolean };
+}
 
 type Room = [
   string,
@@ -66,3 +69,8 @@ type Room = [
     timeStamp: any;
   }
 ];
+
+type message = {
+  text: string;
+  img: string;
+};
