@@ -1,24 +1,22 @@
 import { chatSelector, imageSelector, userSelector } from "@/redux/selectors";
+import { unselectImage } from "@/redux/slices/imageSlice";
 import Image from "next/image";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { MdClear, MdOutlineSearch, MdSend } from "react-icons/md";
+import { MdClear, MdOutlineSearch } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { ConversationFooter } from "./ConversationFooter";
 import { ConversationPanel } from "./ConversationPanel";
-import { sendImage, unselectImage } from "@/redux/slices/imageSlice";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Conversation = () => {
-  const { shortId, roomId, name, participants } = useSelector(chatSelector);
+  useAuth();
+  const { shortId, name, participants } = useSelector(chatSelector);
   const { file } = useSelector(imageSelector);
   const { id } = useSelector(userSelector);
   return (
     <div className="flex flex-col flex-grow h-full w-full h-full min-w-[70%]">
       <ChatHeader name={name} shortId={shortId} participants={participants} />
-      {!file ? (
-        <ConversationPanel roomId={roomId} id={id} shortId={shortId} />
-      ) : (
-        <ImagePreview file={file} />
-      )}
+      {!file ? <ConversationPanel id={id} /> : <ImagePreview file={file} />}
       <ConversationFooter shortId={shortId} participants={participants} />
     </div>
   );

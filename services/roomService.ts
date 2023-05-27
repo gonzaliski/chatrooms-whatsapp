@@ -4,13 +4,11 @@ import axios from "axios";
 
 class RoomService {
   userId: string;
-  token: string;
   name: string;
   constructor() {
     const currentState = store.getState();
-    const { token, id, name } = currentState.user;
+    const { id, name } = currentState.user;
     this.userId = id;
-    this.token = token;
     this.name = name;
   }
   async getRooms() {
@@ -51,6 +49,8 @@ class RoomService {
     }
   }
   async createRoom(name: string) {
+    console.log(this.userId);
+
     try {
       const res = await axios.post(
         `${API_BASE_URL}/rooms`,
@@ -65,6 +65,8 @@ class RoomService {
     }
   }
   async joinRoom(code: string) {
+    console.log(this.userId);
+
     try {
       const res = await axios.get(
         `${API_BASE_URL}/rooms/${code.toUpperCase().trim()}`,

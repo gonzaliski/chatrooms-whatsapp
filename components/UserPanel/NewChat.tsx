@@ -4,6 +4,7 @@ import { Modal } from "../Modal";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { roomService } from "@/services/roomService";
 import { ErrorCard } from "../ErrorCard";
+import { MainForm } from "../MainForm";
 
 export const NewChat = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -164,19 +165,5 @@ export const NewChat = () => {
         </button>
       </span>
     </>
-  );
-};
-
-const MainForm = ({
-  onSubmit,
-  children,
-}: {
-  onSubmit?: (b: any) => any;
-  children?: React.ReactNode;
-}) => {
-  return (
-    <form onSubmit={onSubmit} className="flex flex-col w-full gap-4">
-      {children}
-    </form>
   );
 };
