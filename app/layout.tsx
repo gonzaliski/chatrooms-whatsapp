@@ -16,7 +16,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Suspense fallback={<Loading />}>
-            <div className="flex h-screen bg-wpp-green.100">{children}</div>
+            <div className="relative flex h-screen bg-wpp-green.100">
+              {children}
+            </div>
           </Suspense>
         </Providers>
       </body>

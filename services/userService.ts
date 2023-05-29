@@ -64,8 +64,6 @@ class UserService {
   }
 
   async updateData(updatableData: UpdatableData) {
-    console.log(updatableData);
-
     try {
       if (auth.currentUser) {
         await updateProfile(auth.currentUser, updatableData);

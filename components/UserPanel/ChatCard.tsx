@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { MdPhotoCamera } from "react-icons/md";
+import defaultGroup from "../../public/defaultGroups.jpg";
 export const ChatCard = ({
   id,
   shortId,
@@ -20,9 +21,7 @@ export const ChatCard = ({
     >
       <div className="px-[15px]">
         <Image
-          src={
-            "https://images.pexels.com/photos/2589653/pexels-photo-2589653.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-          }
+          src={defaultGroup}
           className="inline object-cover w-[49px] h-[49px] rounded-full max-w-none mt-2"
           width="100"
           height="100"

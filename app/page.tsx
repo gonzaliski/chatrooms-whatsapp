@@ -13,7 +13,7 @@ export default function Home() {
           <Image
             src={AppLogo}
             alt={"AppLogo"}
-            className="animate-bounce-slow inline w-30 sm:w-20 md:w-40 "
+            className="animate-bounce-slow inline w-20 sm:w-30 md:w-40 "
           />
         </div>
         <h2 className="text-white font-thin text-md sm:text-lg md:text-xl">

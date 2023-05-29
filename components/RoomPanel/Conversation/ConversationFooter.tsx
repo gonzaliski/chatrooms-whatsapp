@@ -1,7 +1,7 @@
 "use client";
 import { AttatchFile } from "@/components/AttatchFile";
 import { ConversationInput } from "@/components/RoomPanel/Conversation/ConversationInput";
-import { imageSelector } from "@/redux/selectors";
+import { imageSelector, userSelector } from "@/redux/selectors";
 import { unselectImage } from "@/redux/slices/imageSlice";
 import { roomService } from "@/services/roomService";
 import { uploadImage } from "@/utils/uploadImage";
@@ -19,6 +19,7 @@ export const ConversationFooter = ({
   participants: participant[];
 }) => {
   const { file } = useSelector(imageSelector);
+  const { id, name, photoURL } = useSelector(userSelector);
   const [value, setValue] = useState("");
   const [img, setImg] = useState<Blob>();
   const [error, setError] = useState("");
@@ -46,7 +47,10 @@ export const ConversationFooter = ({
       await roomService.pushMessage(
         { text: value, img: imgURL },
         participants,
-        shortId
+        shortId,
+        id,
+        name,
+        photoURL
       );
       setValue("");
     } catch (error: any) {

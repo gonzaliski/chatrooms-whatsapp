@@ -39,6 +39,7 @@ interface UserState {
   photoURL: string;
   id: string;
   loading: boolean;
+  isNew: boolean;
 }
 interface userState {
   user: UserState;

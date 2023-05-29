@@ -11,15 +11,16 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import defaultUser from "../public/deafultUserPhoto.jpg";
 import { useAuth } from "@/hooks/useAuth";
+import { Spinner } from "./loaders/Spinner";
 export const UserData = () => {
   useAuth();
-  const { name, photoURL } = useSelector(userSelector);
+  const { name, photoURL, isNew } = useSelector(userSelector);
   const { file } = useSelector(imageSelector);
   const dispatch = useDispatch();
   const router = useRouter();
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
-  const [isSubmiting, setIsSubmiting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [img, setImg] = useState<Blob>();
   const handleError = (e: string) => {
     setError(e);
@@ -29,6 +30,7 @@ export const UserData = () => {
   };
 
   const handleUpdateUser = async () => {
+    setIsLoading(true);
     try {
       let payload = {};
       if (img) {
@@ -41,9 +43,11 @@ export const UserData = () => {
         payload = { ...payload, displayName: value };
       }
       await userService.updateData(payload);
+      setIsLoading(false);
       dispatch(unselectImage());
       router.push("/rooms");
     } catch (e: any) {
+      setIsLoading(false);
       setError(e.toString());
     }
   };
@@ -63,7 +67,7 @@ export const UserData = () => {
               name="value"
               onChange={(e) => setValue(e.target.value)}
               value={value || name}
-              disabled={isSubmiting}
+              disabled={isLoading}
               placeholder="Nombre"
               className="p-1 focus:outline-none rounded-md text-white bg-wpp-darkblue"
             ></input>
@@ -81,21 +85,32 @@ export const UserData = () => {
         />
         <div
           className={`flex items-center gap-4 text-white ${
-            isSubmiting && "pointer-events-none"
+            isLoading && "pointer-events-none"
           }`}
         >
           <AttatchFile onError={handleError} onImg={setImg} />
           Seleccionar imagen
         </div>
-
+        {isNew && (
+          <button
+            className="rounded-md bg-wpp-darkblue text-white p-1 w-full self-end"
+            type="button"
+            onClick={() => router.push("/rooms")}
+            disabled={isLoading}
+          >
+            Volver
+          </button>
+        )}
         <button
           className="rounded-md bg-wpp-primary text-white p-1 w-full self-end"
           type="button"
           onClick={handleUpdateUser}
-          disabled={isSubmiting}
+          disabled={isLoading}
         >
           Guardar cambios
         </button>
+
+        {isLoading && <Spinner />}
         {error && <ErrorCard msg={error} />}
       </form>
     </div>

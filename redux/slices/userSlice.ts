@@ -14,6 +14,7 @@ const emptyState = {
   id: "",
   name: "",
   loading: false,
+  isNew: true,
 };
 const initialState = parsedUser || emptyState;
 

@@ -5,16 +5,19 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 export function useUserChats() {
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useSelector(userSelector);
   const [rooms, setRooms] = useState([] as any);
 
   useEffect(() => {
     const getChats = () => {
+      setIsLoading(true);
       const unsub = onSnapshot(doc(collection(db, "usersChat"), id), (doc) => {
         let data = doc.data();
         let chats = data && Object.entries(data);
         console.log(chats);
         setRooms(chats);
+        setIsLoading(false);
       });
       return () => {
         unsub();
@@ -23,5 +26,5 @@ export function useUserChats() {
 
     id && getChats();
   }, [id]);
-  return rooms;
+  return [rooms, isLoading];
 }

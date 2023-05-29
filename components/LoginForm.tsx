@@ -22,7 +22,7 @@ export const LoginForm = () => {
     e.preventDefault();
     try {
       const res = await userService.signUp(email, password);
-      dispatch(setUserData(res));
+      dispatch(setUserData({ res, isNew: true }));
       router.push("/user");
     } catch (e: any) {
       setError(e.message);
@@ -45,7 +45,7 @@ export const LoginForm = () => {
     router.push("/rooms");
   };
   return (
-    <div className="flex flex-col items-center gap-4 w-2/6">
+    <div className="flex flex-col items-center gap-4">
       <h2 className="text-white font-normal text-xl sm:text-2xl md:text-3xl">
         {register ? "Registrate para comenzar" : "Ingresar"}
       </h2>
@@ -69,7 +69,7 @@ export const LoginForm = () => {
         </div>
       )}
       <button
-        className="flex items-center gap-3 px-3 text-xl rounded-2xl bg-wpp-darkblue text-white p-2"
+        className="flex items-center gap-3 px-3 text-md md:text-xl rounded-2xl bg-wpp-darkblue text-white p-2"
         onClick={handleGoogleLogin}
       >
         <FcGoogle /> Ingresar con google
