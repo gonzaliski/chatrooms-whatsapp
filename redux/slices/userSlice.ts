@@ -13,7 +13,7 @@ const emptyState = {
   photoURL: "",
   id: "",
   name: "",
-  loading: false,
+  loading: true,
   isNew: true,
 };
 const initialState = parsedUser || emptyState;
@@ -25,11 +25,9 @@ const userSlice = createSlice({
     setUserData(state, action) {
       return {
         ...state,
+        loading: false,
         ...action.payload,
       };
-    },
-    setLoading(state, action) {
-      state.loading = action.payload;
     },
     logOut: () => emptyState,
   },

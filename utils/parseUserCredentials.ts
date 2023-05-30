@@ -6,7 +6,7 @@ export function parseUserCredentials(user: User) {
     email: user.email,
     photoURL: user.photoURL,
     name: user.displayName,
-    loading: false,
+    loading: true,
     isNew: false,
   };
 }

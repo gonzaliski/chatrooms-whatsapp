@@ -12,7 +12,7 @@ export default function Rooms() {
   const [pageloading, setPageLoading] = useState(true);
   const { id, loading } = useSelector(userSelector);
   useEffect(() => {
-    if (loading && !id) {
+    if (!loading && !id) {
       console.log("yendose");
       router.push("/");
     }
@@ -24,7 +24,7 @@ export default function Rooms() {
       {pageloading ? (
         <Loading />
       ) : (
-        <section className="flex lg:container lg:mx-auto h-screen lg:h-[95%] self-center w-full items-center justify-center shadow-lg">
+        <section className="flex lg:container lg:mx-auto h-screen lg:h-[95%] self-center w-full items-center md:justify-center shadow-lg overflow-y-hidden md:overflow-y-visible">
           <UserPanel />
           <RoomPanel />
         </section>

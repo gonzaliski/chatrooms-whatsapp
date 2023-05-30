@@ -15,7 +15,7 @@ export const Conversation = () => {
   const { file } = useSelector(imageSelector);
   const { id } = useSelector(userSelector);
   return (
-    <div className="flex flex-col flex-grow h-full w-full h-full min-w-[70%]">
+    <div className="flex flex-col md:flex-grow h-full w-full h-full min-w-[70%]">
       <ChatHeader
         name={name}
         shortId={shortId}
