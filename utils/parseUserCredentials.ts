@@ -7,6 +7,7 @@ export function parseUserCredentials(user: User) {
     photoURL: user.photoURL,
     name: user.displayName,
     loading: true,
+    isAuth: false,
     isNew: false,
   };
 }

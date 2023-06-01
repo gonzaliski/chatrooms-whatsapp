@@ -11,7 +11,6 @@ import { MainForm } from "./MainForm";
 
 export const LoginForm = () => {
   const router = useRouter();
-  const { id } = useSelector(userSelector);
   const [register, setRegister] = useState(true);
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -44,9 +43,16 @@ export const LoginForm = () => {
     dispatch(setUserData(res));
     router.push("/rooms");
   };
+
+  const handleCancel = () => {
+    setRegister(true);
+    setEmail("");
+    setPassword("");
+  };
+
   return (
     <div className="flex flex-col items-center gap-4">
-      <h2 className="text-white font-normal text-xl sm:text-2xl md:text-3xl">
+      <h2 className="text-white font-normal text-xl sm:text-2xl md:text-3xl md:w-80 md:text-center">
         {register ? "Registrate para comenzar" : "Ingresar"}
       </h2>
 
@@ -57,11 +63,19 @@ export const LoginForm = () => {
         password={password}
         handler={register ? handleRegister : handleLogin}
       />
+      {!register && (
+        <button
+          className="flex items-center justify-center gap-3 px-3 text-sm w-full rounded-2xl border-2 border-solid border-red-500 text-white p-2"
+          onClick={handleCancel}
+        >
+          Cancelar
+        </button>
+      )}
       {register && (
         <div className="flex items-center justify-between w-full">
           <p className="text-white">Ya tenés una cuenta?</p>
           <button
-            className="rounded-2xl bg-wpp-darkblue text-white p-2"
+            className="rounded-2xl bg-wpp-darkblue text-white p-2 hover:brightness-75"
             onClick={() => setRegister(false)}
           >
             Ingresar
@@ -69,7 +83,7 @@ export const LoginForm = () => {
         </div>
       )}
       <button
-        className="flex items-center gap-3 px-3 text-md md:text-xl rounded-2xl bg-wpp-darkblue text-white p-2"
+        className="flex items-center gap-3 px-3 text-md  rounded-2xl bg-wpp-darkblue text-white p-2"
         onClick={handleGoogleLogin}
       >
         <FcGoogle /> Ingresar con google

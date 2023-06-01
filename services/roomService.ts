@@ -16,7 +16,7 @@ class RoomService {
     }
   }
   async pushMessage(
-    message: message,
+    message: { text: string; img: string },
     participants: participant[],
     roomId: string,
     userId: string,

@@ -29,7 +29,7 @@ export const ChatCardList = () => {
               key={room[0]}
               participants={room[1].participants}
               shortId={room[1].roomShortId}
-              id={room[0]}
+              roomId={room[0]}
               name={room[1].roomName}
               lastMessage={room[1].lastMessage}
               timeStamp={room[1].timeStamp}

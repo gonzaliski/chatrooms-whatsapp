@@ -10,9 +10,9 @@ import Loading from "../loading";
 export default function Rooms() {
   const router = useRouter();
   const [pageloading, setPageLoading] = useState(true);
-  const { id, loading } = useSelector(userSelector);
+  const { id, isAuth } = useSelector(userSelector);
   useEffect(() => {
-    if (!loading && !id) {
+    if (!isAuth && !id) {
       console.log("yendose");
       router.push("/");
     }

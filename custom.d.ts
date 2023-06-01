@@ -5,6 +5,7 @@ type Message = {
   timeStamp: any;
   prevIsFromOther: boolean;
   isLast: boolean;
+  profilePicture: string;
 };
 
 type LSUserCredentials = {
@@ -25,7 +26,7 @@ type ChatCard = {
 
 type ChatCardProps = {
   shortId: string;
-  id: string;
+  roomId: string;
   participants: participant[];
   name: string;
   lastMessage: message;
@@ -39,6 +40,7 @@ interface UserState {
   photoURL: string;
   id: string;
   loading: boolean;
+  isAuth: boolean;
   isNew: boolean;
 }
 interface userState {
@@ -52,7 +54,6 @@ type RoomSelection = {
   shortId: string;
   roomId: string;
   name: string;
-  participants: participant[];
 };
 interface chatState {
   chat: RoomSelection;
@@ -75,6 +76,8 @@ type Room = [
 type message = {
   text: string;
   img: string;
+  from: string;
+  id: string;
 };
 
 type AuthProps = {
@@ -92,4 +95,9 @@ type UpdatableData = {
 
 type UserTabProps = {
   photoURL?: string;
+};
+
+type participantsData = {
+  profilePictures: any[];
+  participants: participant[];
 };

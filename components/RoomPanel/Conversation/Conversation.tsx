@@ -1,29 +1,44 @@
+import { useAuth } from "@/hooks/useAuth";
+import { useParticipants } from "@/hooks/useParticipants";
 import { chatSelector, imageSelector, userSelector } from "@/redux/selectors";
 import { unselectImage } from "@/redux/slices/imageSlice";
 import Image from "next/image";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { MdClear, MdOutlineSearch } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import defaultGroup from "../../../public/defaultGroups.jpg";
 import { ConversationFooter } from "./ConversationFooter";
 import { ConversationPanel } from "./ConversationPanel";
-import { useAuth } from "@/hooks/useAuth";
-import defaultGroup from "../../../public/defaultGroups.jpg";
 
 export const Conversation = () => {
   useAuth();
-  const { shortId, name, participants } = useSelector(chatSelector);
+  const participants = useParticipants();
+  const { shortId, name } = useSelector(chatSelector);
   const { file } = useSelector(imageSelector);
   const { id } = useSelector(userSelector);
+  console.log(participants.profilePictures);
+
   return (
     <div className="flex flex-col md:flex-grow h-full w-full h-full min-w-[70%]">
       <ChatHeader
         name={name}
         shortId={shortId}
-        participants={participants}
+        participants={participants.participants}
         userId={id}
       />
-      {!file ? <ConversationPanel id={id} /> : <ImagePreview file={file} />}
-      <ConversationFooter shortId={shortId} participants={participants} />
+      {!file ? (
+        <ConversationPanel
+          id={id}
+          profilePictures={participants.profilePictures}
+          participants={participants.participants}
+        />
+      ) : (
+        <ImagePreview file={file} />
+      )}
+      <ConversationFooter
+        shortId={shortId}
+        participants={participants.participants}
+      />
     </div>
   );
 };

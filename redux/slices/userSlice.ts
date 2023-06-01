@@ -4,16 +4,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 console.log(auth.currentUser);
 
-const parsedUser = auth.currentUser
+const storagedUser = auth.currentUser
   ? parseUserCredentials(auth.currentUser)
   : null;
-
+const parsedUser =
+  storagedUser !== null ? { ...storagedUser, isAuth: true } : null;
+console.log(parsedUser);
 const emptyState = {
   email: "",
   photoURL: "",
   id: "",
   name: "",
   loading: true,
+  isAuth: false,
   isNew: true,
 };
 const initialState = parsedUser || emptyState;
@@ -26,6 +29,7 @@ const userSlice = createSlice({
       return {
         ...state,
         loading: false,
+        isAuth: true,
         ...action.payload,
       };
     },

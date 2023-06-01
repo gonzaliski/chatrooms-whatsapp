@@ -2,11 +2,19 @@
 import { useChat } from "@/hooks/useChat";
 import { Message } from "./Message";
 import { useEffect, useRef } from "react";
+import { getMessageSource, getProfilePicture } from "@/utils/filters";
 
-export const ConversationPanel = ({ id }: { id: string }) => {
+export const ConversationPanel = ({
+  id,
+  profilePictures,
+  participants,
+}: {
+  id: string;
+  profilePictures: participantsData["profilePictures"];
+  participants: participantsData["participants"];
+}) => {
   const [messages, shortId] = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     messages && messagesEndRef.current?.scrollTo({ behavior: "auto" });
   }, []);
@@ -27,11 +35,14 @@ export const ConversationPanel = ({ id }: { id: string }) => {
                 key={m[0]}
                 incoming={m[1].id !== id}
                 message={m[1].message}
-                from={m[1].name}
+                from={participants && getMessageSource(m[1].id, participants)}
                 timeStamp={m[1].timeStamp}
                 prevIsFromOther={shouldHaveNoCorner}
                 isLast={
                   nextMessage == undefined || nextMessage[1].id !== m[1].id
+                }
+                profilePicture={
+                  profilePictures && getProfilePicture(m[1].id, profilePictures)
                 }
               />
             );
