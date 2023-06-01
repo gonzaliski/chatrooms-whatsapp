@@ -15,6 +15,12 @@ export const ChatCard = ({
 }: ChatCardProps) => {
   const { id } = useSelector(userSelector);
   let timeStampDate = timeStamp?.toDate();
+  let messageFrom =
+    lastMessage.id !== undefined
+      ? lastMessage.id == id
+        ? "Tú: "
+        : lastMessage?.from + ": "
+      : "";
   return (
     <div
       className={`flex text-white justify-start max-w-md min-h-[72px] relative cursor-pointer hover:bg-wpp-darkblue
@@ -32,10 +38,10 @@ export const ChatCard = ({
       </div>
       <div className="flex flex-col flex-grow font-light justify-center pr-5 truncate border-t border-gray-400/10">
         <span className="text-lg">{name}</span>
-        <span className="text-sm text-gray-400 truncate min-h-[15px] min-w-full">
-          {lastMessage.id == id ? "Tú: " : lastMessage?.from + ": "}
+        <span className="flex gap-2 text-sm text-gray-400 truncate min-h-[15px] min-w-full">
+          {messageFrom}
           {lastMessage?.img ? (
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-1 items-center">
               <MdPhotoCamera /> Imagen
             </div>
           ) : (

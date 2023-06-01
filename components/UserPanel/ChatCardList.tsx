@@ -2,14 +2,16 @@
 import { useUserChats } from "@/hooks/useUserChats";
 import { selectChat } from "@/redux/slices/chatSlice";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ChatCardSkeleton } from "../loaders/ChatCardSkeleton";
 import { ChatCard } from "./ChatCard";
 import { NewChat } from "./NewChat";
+import { chatListFilterSelector } from "@/redux/selectors";
 
 export const ChatCardList = () => {
   const [selected, setSelected] = useState("");
   const [rooms, isLoading] = useUserChats();
+  const { filter } = useSelector(chatListFilterSelector);
   const dispatch = useDispatch();
   const handleSelect = (room: RoomSelection) => {
     setSelected(room.roomId);
@@ -18,6 +20,11 @@ export const ChatCardList = () => {
   return (
     <div className="flex flex-col h-full w-full overflow-auto pr-1">
       <NewChat />
+      {filter && (
+        <p className="text-sm w-full text-clip text-wpp-primary text-center my-4">
+          RESULTADOS DE BÚSQUEDA
+        </p>
+      )}
       {isLoading ? (
         <ChatCardSkeleton />
       ) : (

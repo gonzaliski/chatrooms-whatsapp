@@ -5,7 +5,7 @@ import { imageSelector, userSelector } from "@/redux/selectors";
 import { unselectImage } from "@/redux/slices/imageSlice";
 import { roomService } from "@/services/roomService";
 import { uploadImage } from "@/utils/uploadImage";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,7 +57,11 @@ export const ConversationFooter = ({
       setError(error);
     }
   };
-
+  useEffect(() => {
+    if (!file) {
+      setImg(undefined);
+    }
+  }, [file]);
   return (
     <>
       {!file ? (

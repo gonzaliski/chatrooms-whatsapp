@@ -61,6 +61,9 @@ interface chatState {
 interface imageState {
   image: { file: string; pendingToSend: boolean };
 }
+interface chatListState {
+  chatListFilter: { filter: string };
+}
 
 type Room = [
   string,

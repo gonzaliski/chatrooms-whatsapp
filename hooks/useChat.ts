@@ -13,7 +13,9 @@ export function useChat() {
       console.log("messages", snapshot.val());
       let currentMessages =
         snapshot.val() && Object.entries(snapshot.val()?.messages);
-      setMessages(currentMessages);
+      setTimeout(() => {
+        setMessages(currentMessages);
+      }, 400);
     });
     return () => {
       // Detiene la escucha de cambios

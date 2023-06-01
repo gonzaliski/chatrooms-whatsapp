@@ -6,14 +6,15 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../loading";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Rooms() {
+  const isAuth = useAuth();
   const router = useRouter();
   const [pageloading, setPageLoading] = useState(true);
-  const { id, isAuth } = useSelector(userSelector);
+  const { id, loading } = useSelector(userSelector);
   useEffect(() => {
-    if (!isAuth && !id) {
-      console.log("yendose");
+    if (!isAuth && !loading) {
       router.push("/");
     }
     setPageLoading(false);

@@ -11,7 +11,6 @@ import { ConversationFooter } from "./ConversationFooter";
 import { ConversationPanel } from "./ConversationPanel";
 
 export const Conversation = () => {
-  useAuth();
   const participants = useParticipants();
   const { shortId, name } = useSelector(chatSelector);
   const { file } = useSelector(imageSelector);

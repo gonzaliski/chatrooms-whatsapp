@@ -10,7 +10,6 @@ import defaultUser from "../../public/deafultUserPhoto.jpg";
 import { LogOutButton } from "./LogOutButton";
 
 export const UserTab = () => {
-  useAuth();
   const { photoURL } = useSelector(userSelector);
   const router = useRouter();
   return (

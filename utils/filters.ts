@@ -14,15 +14,14 @@ export function getProfilePicture(
   array: { [a: string]: string }[]
 ) {
   let search = array.find((value) => {
-    console.log(id);
-
     return Object.keys(value)[0] == id;
   });
-  console.log(search);
 
   if (search) {
-    console.log(search[Object.keys(search)[0]]);
     return search[Object.keys(search)[0]];
   }
   return "";
+}
+export function getRoomsByName(q: string, rooms: Room[]) {
+  return rooms.filter((room) => room[1].roomName.includes(q));
 }

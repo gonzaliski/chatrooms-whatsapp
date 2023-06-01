@@ -12,7 +12,7 @@ export const RoomPanel = () => {
 
 const RoomPreview = () => {
   return (
-    <section className="flex flex-col md:container md:mx-auto w-full min-w-full md:min-w-[70%] h-full items-center justify-center gap-5 bg-wpp-green.300 overflow-visible">
+    <section className="flex flex-col md:container md:mx-auto w-full min-w-full md:min-w-[70%] h-full items-center justify-center gap-5 bg-wpp-green.300 overflow-visible border-b-wpp-primary border-solid border-b-8">
       <div className="flex items-center gap-2 justify-center">
         <h1 className="inline text-white font-bold text-3xl sm:text-4xl md:text-6xl ">
           ChatRooms
