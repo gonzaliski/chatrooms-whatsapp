@@ -2,6 +2,11 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -19,3 +24,4 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore();
 export const storage = getStorage();
 export const rtdb = getDatabase();
+export const auth = getAuth();

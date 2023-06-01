@@ -1,10 +1,11 @@
 type Message = {
   incoming: boolean;
-  message: string;
+  message: message;
   from: string;
   timeStamp: any;
   prevIsFromOther: boolean;
   isLast: boolean;
+  profilePicture: string;
 };
 
 type LSUserCredentials = {
@@ -25,10 +26,10 @@ type ChatCard = {
 
 type ChatCardProps = {
   shortId: string;
-  id: string;
+  roomId: string;
   participants: participant[];
   name: string;
-  lastMessage: string;
+  lastMessage: message;
   timeStamp: any;
   selected: boolean;
   onSelect: (a: RoomSelection) => any;
@@ -36,8 +37,11 @@ type ChatCardProps = {
 interface UserState {
   email: string;
   name: string;
-  token: string;
+  photoURL: string;
   id: string;
+  loading: boolean;
+  isAuth: boolean;
+  isNew: boolean;
 }
 interface userState {
   user: UserState;
@@ -50,13 +54,15 @@ type RoomSelection = {
   shortId: string;
   roomId: string;
   name: string;
-  participants: participant[];
 };
 interface chatState {
   chat: RoomSelection;
 }
 interface imageState {
   image: { file: string; pendingToSend: boolean };
+}
+interface chatListState {
+  chatListFilter: { filter: string };
 }
 
 type Room = [
@@ -65,7 +71,7 @@ type Room = [
     participants: participant[];
     roomShortId: string;
     roomName: string;
-    lastMessage: string;
+    lastMessage: message;
     timeStamp: any;
   }
 ];
@@ -73,4 +79,28 @@ type Room = [
 type message = {
   text: string;
   img: string;
+  from: string;
+  id: string;
+};
+
+type AuthProps = {
+  handleEmailChange: (e: string) => void;
+  handlePassChange: (e: string) => void;
+  email: string;
+  password: string;
+  handler: (e: React.FormEvent<HTMLFormElement>) => void;
+};
+
+type UpdatableData = {
+  photoURL?: string;
+  displayName?: string;
+};
+
+type UserTabProps = {
+  photoURL?: string;
+};
+
+type participantsData = {
+  profilePictures: any[];
+  participants: participant[];
 };

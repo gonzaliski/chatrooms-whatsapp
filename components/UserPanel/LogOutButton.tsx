@@ -8,10 +8,14 @@ import { useDispatch } from "react-redux";
 export const LogOutButton = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const handleLogOut = () => {
-    userService.removeUserCredentialsOnLS();
-    dispatch(logOut());
-    router.push("/");
+  const handleLogOut = async () => {
+    try {
+      await userService.logOut();
+      dispatch(logOut());
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <MdOutlineLogout
