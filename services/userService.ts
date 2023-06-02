@@ -1,5 +1,4 @@
 import { auth } from "@/firebase";
-import { API_BASE_URL } from "@/utils/constants";
 import axios from "axios";
 import {
   GoogleAuthProvider,
@@ -43,9 +42,13 @@ class UserService {
     if (photoURL) {
       payload = { ...payload, photoURL };
     }
-    return await axios.post(API_BASE_URL + "/auth", payload, {
-      params: { userId },
-    });
+    return await axios.post(
+      process.env.NEXT_PUBLIC_API_BASE_URL + "/auth",
+      payload,
+      {
+        params: { userId },
+      }
+    );
   }
 
   async signUp(emailSignup: string, password: string) {
@@ -89,9 +92,13 @@ class UserService {
     if (photoURL) {
       payload = { ...payload, photoURL };
     }
-    return await axios.put(API_BASE_URL + "/participant", payload, {
-      params: { userId },
-    });
+    return await axios.put(
+      process.env.NEXT_PUBLIC_API_BASE_URL + "/participant",
+      payload,
+      {
+        params: { userId },
+      }
+    );
   }
 
   async updateData(updatableData: UpdatableData) {
