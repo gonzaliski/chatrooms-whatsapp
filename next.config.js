@@ -4,8 +4,12 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains:["images.pexels.com"]
-  }
-}
+    domains: [
+      "images.pexels.com",
+      "firebasestorage.googleapis.com",
+      "lh3.googleusercontent.com",
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

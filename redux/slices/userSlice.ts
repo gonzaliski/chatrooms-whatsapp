@@ -1,29 +1,41 @@
+import { auth } from "@/firebase";
+import { parseUserCredentials } from "@/utils/parseUserCredentials";
 import { createSlice } from "@reduxjs/toolkit";
-import { userService } from "@/services/userService";
 
-const initialState = userService.getUserCredentialsFromLS() || {
+console.log(auth.currentUser);
+
+const storagedUser = auth.currentUser
+  ? parseUserCredentials(auth.currentUser)
+  : null;
+const parsedUser =
+  storagedUser !== null ? { ...storagedUser, isAuth: true } : null;
+console.log(parsedUser);
+const emptyState = {
   email: "",
-  token: "",
+  photoURL: "",
   id: "",
   name: "",
+  loading: true,
+  isAuth: false,
+  isNew: true,
 };
+const initialState = parsedUser || emptyState;
 
 const userSlice = createSlice({
   name: "user",
   initialState: initialState as UserState,
   reducers: {
-    addUserEmail(state, action) {
-      state.email = action.payload.email;
-    },
-    addUserData(state, action) {
-      state = {
+    setUserData(state, action) {
+      return {
         ...state,
+        loading: false,
+        isAuth: true,
         ...action.payload,
       };
     },
-    logOut: () => initialState,
+    logOut: () => emptyState,
   },
 });
 
-export const { addUserEmail, addUserData, logOut } = userSlice.actions;
+export const { setUserData, logOut } = userSlice.actions;
 export default userSlice.reducer;

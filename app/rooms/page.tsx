@@ -1,13 +1,35 @@
+"use client";
 import { RoomPanel } from "@/components/RoomPanel/RoomPanel";
 import { UserPanel } from "@/components/UserPanel/UserPanel";
+import { userSelector } from "@/redux/selectors";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Loading from "../loading";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Rooms() {
+  const isAuth = useAuth();
+  const router = useRouter();
+  const [pageloading, setPageLoading] = useState(true);
+  const { id, loading } = useSelector(userSelector);
+  useEffect(() => {
+    if (!isAuth && !loading) {
+      router.push("/");
+    }
+    setPageLoading(false);
+  }, [id]);
+
   return (
     <>
-      <section className="flex container mx-auto h-screen lg:h-[95%] self-center w-full items-center justify-center shadow-lg">
-        <UserPanel />
-        <RoomPanel />
-      </section>
+      {pageloading ? (
+        <Loading />
+      ) : (
+        <section className="flex lg:container lg:mx-auto h-screen lg:h-[95%] self-center w-full items-center md:justify-center shadow-lg overflow-y-hidden md:overflow-y-visible">
+          <UserPanel />
+          <RoomPanel />
+        </section>
+      )}
     </>
   );
 }

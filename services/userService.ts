@@ -1,64 +1,126 @@
-import { store } from "@/redux/store";
+import { auth } from "@/firebase";
 import { API_BASE_URL } from "@/utils/constants";
 import axios from "axios";
+import {
+  GoogleAuthProvider,
+  browserSessionPersistence,
+  createUserWithEmailAndPassword,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
 
 class UserService {
-  getUserCredentialsFromLS() {
-    if (typeof window !== "undefined") {
-      const userCredentials = localStorage.getItem("userCredentials");
-      const parsedCredentials = userCredentials
-        ? JSON.parse(userCredentials)
-        : null;
-      return parsedCredentials;
-    }
-  }
-  saveUserCredentialsOnLS(data: LSUserCredentials) {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("userCredentials", JSON.stringify(data));
-    }
-  }
-  removeUserCredentialsOnLS() {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("userCredentials");
-    }
-  }
-  async sendCode(email: string) {
+  async signIn(emailSignIn: string, password: string) {
     try {
-      const res = await axios.post(`${API_BASE_URL}/auth`, { email });
-      return [res.data.message, res.status];
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  async getToken(code: string, email: string) {
-    console.log(code, email);
-    try {
-      const res = await axios.post(`${API_BASE_URL}/auth/token`, {
-        code,
-        email,
-      });
-      this.saveUserCredentialsOnLS({
-        token: res.data.token,
-        id: res.data.userId,
-        name: res.data.name,
-      });
-      return res.data;
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  async updateUser(name: string, id: string) {
-    try {
-      const res = await axios.put(
-        `${API_BASE_URL}/user`,
-        {
-          name,
-        },
-        { params: { userId: id } }
+      await setPersistence(auth, browserSessionPersistence);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        emailSignIn,
+        password
       );
-      return res.data;
+      const { displayName, photoURL, uid, email } = userCredential.user;
+      this.syncUser(uid, displayName, photoURL);
+      return {
+        name: displayName,
+        photoURL,
+        id: uid,
+        email,
+      };
+    } catch (e) {
+      // Manejo del error
+      throw Error("Las credenciales no son correctas");
+    }
+  }
+
+  async syncUser(userId: string, name: string | null, photoURL: string | null) {
+    let payload = {};
+    if (name) {
+      payload = { name };
+    }
+    if (photoURL) {
+      payload = { ...payload, photoURL };
+    }
+    return await axios.post(API_BASE_URL + "/auth", payload, {
+      params: { userId },
+    });
+  }
+
+  async signUp(emailSignup: string, password: string) {
+    try {
+      await setPersistence(auth, browserSessionPersistence);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        emailSignup,
+        password
+      );
+      const { uid, email, photoURL, displayName } = userCredential.user;
+      this.syncUser(uid, displayName, photoURL);
+      return {
+        id: uid,
+        email,
+      };
+    } catch (e) {
+      // Manejo del error
+      throw Error("Ya existe una cuenta con este email");
+    }
+  }
+
+  async loginWithGoogle() {
+    try {
+      const googleProvider = new GoogleAuthProvider();
+      await setPersistence(auth, browserSessionPersistence);
+      const res = await signInWithPopup(auth, googleProvider);
+      const { displayName, email, photoURL, uid } = res.user;
+      this.syncUser(uid, displayName, photoURL);
+      return { name: displayName, email, photoURL, id: uid };
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async updateParticipant(userId: string, name?: string, photoURL?: string) {
+    let payload = {};
+    if (name) {
+      payload = { name };
+    }
+    if (photoURL) {
+      payload = { ...payload, photoURL };
+    }
+    return await axios.put(API_BASE_URL + "/participant", payload, {
+      params: { userId },
+    });
+  }
+
+  async updateData(updatableData: UpdatableData) {
+    try {
+      if (auth.currentUser) {
+        const { uid } = auth.currentUser;
+        await updateProfile(auth.currentUser, updatableData);
+        console.log(updatableData.photoURL, updatableData.displayName);
+
+        this.updateParticipant(
+          uid,
+          updatableData.displayName,
+          updatableData.photoURL
+        );
+        this.syncUser(
+          uid,
+          updatableData.displayName || null,
+          updatableData.photoURL || null
+        );
+      }
+      return;
+    } catch (e) {
+      throw e;
+    }
+  }
+  async logOut() {
+    try {
+      await signOut(auth);
+      return "Sesión cerrada";
     } catch (e) {
       throw e;
     }

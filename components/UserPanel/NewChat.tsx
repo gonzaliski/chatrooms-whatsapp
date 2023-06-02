@@ -1,32 +1,48 @@
 "use client";
-import { MdClear, MdAdd, MdOutlineKeyboardBackspace } from "react-icons/md";
-import { Modal } from "../Modal";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { userSelector } from "@/redux/selectors";
 import { roomService } from "@/services/roomService";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { MdAdd, MdClear, MdOutlineKeyboardBackspace } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { ErrorCard } from "../ErrorCard";
+import { MainForm } from "../MainForm";
+import { Modal } from "../Modal";
+import { Spinner } from "../loaders/Spinner";
 
 export const NewChat = () => {
+  const { id } = useSelector(userSelector);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [joinEnabled, setJoinEnabled] = useState(false);
   const [createEnabled, setCreateEnabled] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
   const handleCreateRoom = async (e: FormEvent) => {
+    setDisabled(true);
+    setIsLoading(true);
     e.preventDefault();
     try {
-      await roomService.createRoom(value);
-      onClose();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const handleJoinRoom = async (e: FormEvent) => {
-    e.preventDefault();
-    try {
-      await roomService.joinRoom(value);
+      await roomService.createRoom(value, id);
+      setIsLoading(false);
       onClose();
     } catch (e: any) {
       setError(e.response.data.message);
+      setIsLoading(false);
+    }
+  };
+  const handleJoinRoom = async (e: FormEvent) => {
+    setDisabled(true);
+    setIsLoading(true);
+
+    e.preventDefault();
+    try {
+      await roomService.joinRoom(value, id);
+      setIsLoading(false);
+      onClose();
+    } catch (e: any) {
+      setError(e.response.data.message);
+      setIsLoading(false);
     }
   };
 
@@ -84,6 +100,7 @@ export const NewChat = () => {
                     name="value"
                     onChange={handleChange}
                     value={value}
+                    disabled={disabled}
                     placeholder="Nuevo grupo"
                     className="p-1 focus:outline-none rounded-md rounded-tr-none rounded-br-none text-white bg-wpp-darkblue"
                   ></input>
@@ -91,6 +108,7 @@ export const NewChat = () => {
                     className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1"
                     type="button"
                     onClick={handleCreateRoom}
+                    disabled={disabled}
                   >
                     Crear
                   </button>
@@ -116,11 +134,15 @@ export const NewChat = () => {
                     type="text"
                     name="roomCode"
                     onChange={handleChange}
+                    disabled={disabled}
                     value={value.toUpperCase()}
                     placeholder="e.g AS456"
                     className="p-1 focus:outline-none rounded-md rounded-tr-none rounded-br-none text-white bg-wpp-darkblue"
                   ></input>
-                  <button className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1">
+                  <button
+                    className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1"
+                    disabled={disabled}
+                  >
                     Unirse
                   </button>
                 </div>
@@ -152,6 +174,7 @@ export const NewChat = () => {
               </button>
             )}
           </div>
+          {isLoading && <Spinner />}
         </section>
       </Modal>
       <span className="group flex justify-center w-full border-none bg-transparent hover:bg-wpp-green.300 text-white text-2xl p-1">
@@ -164,19 +187,5 @@ export const NewChat = () => {
         </button>
       </span>
     </>
-  );
-};
-
-const MainForm = ({
-  onSubmit,
-  children,
-}: {
-  onSubmit?: (b: any) => any;
-  children?: React.ReactNode;
-}) => {
-  return (
-    <form onSubmit={onSubmit} className="flex flex-col w-full gap-4">
-      {children}
-    </form>
   );
 };
