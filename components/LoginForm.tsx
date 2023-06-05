@@ -1,18 +1,23 @@
 "use client";
+import { useAuth } from "@/hooks/useAuth";
 import { userSelector } from "@/redux/selectors";
 import { setUserData } from "@/redux/slices/userSlice";
 import { userService } from "@/services/userService";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorCard } from "./ErrorCard";
 import { MainForm } from "./MainForm";
+import { Spinner } from "./loaders/Spinner";
 
 export const LoginForm = () => {
+  useAuth();
   const router = useRouter();
   const [register, setRegister] = useState(true);
+  const { isAuth } = useSelector(userSelector);
   const dispatch = useDispatch();
+  const [loading, setIsLoading] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -53,8 +58,16 @@ export const LoginForm = () => {
     setEmail("");
     setPassword("");
   };
+  useEffect(() => {
+    if (isAuth) {
+      router.push("/rooms");
+    }
+    setIsLoading(false);
+  }, [isAuth]);
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className="flex flex-col items-center gap-4">
       <h2 className="text-white font-normal text-xl sm:text-2xl md:text-3xl md:w-80 md:text-center">
         {register ? "Registrate para comenzar" : "Ingresar"}

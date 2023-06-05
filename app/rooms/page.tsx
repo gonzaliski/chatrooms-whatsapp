@@ -5,11 +5,11 @@ import { userSelector } from "@/redux/selectors";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Loading from "../loading";
+import Loading from "@/app/Loading";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Rooms() {
-  const isAlreadyAuth = useAuth();
+  useAuth();
   const router = useRouter();
   const [pageloading, setPageLoading] = useState(true);
   const { id, loading, isAuth } = useSelector(userSelector);

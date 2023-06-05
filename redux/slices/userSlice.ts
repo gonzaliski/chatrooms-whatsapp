@@ -1,13 +1,6 @@
-import { auth } from "@/firebase";
-import { parseUserCredentials } from "@/utils/parseUserCredentials";
 import { createSlice } from "@reduxjs/toolkit";
 
-const storagedUser = auth.currentUser
-  ? parseUserCredentials(auth.currentUser)
-  : null;
-const parsedUser =
-  storagedUser !== null ? { ...storagedUser, isAuth: true } : null;
-const emptyState = {
+const initialState = {
   email: "",
   photoURL: "",
   id: "",
@@ -16,7 +9,6 @@ const emptyState = {
   isAuth: false,
   isNew: true,
 };
-const initialState = parsedUser || emptyState;
 
 const userSlice = createSlice({
   name: "user",
@@ -30,7 +22,7 @@ const userSlice = createSlice({
         ...action.payload,
       };
     },
-    logOut: () => emptyState,
+    logOut: () => initialState,
   },
 });
 

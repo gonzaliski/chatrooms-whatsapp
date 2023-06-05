@@ -11,8 +11,8 @@ export const LogOutButton = () => {
   const handleLogOut = async () => {
     try {
       await userService.logOut();
-      dispatch(logOut());
       router.push("/");
+      dispatch(logOut());
     } catch (error) {
       console.error(error);
     }
