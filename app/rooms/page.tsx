@@ -9,10 +9,10 @@ import Loading from "../loading";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Rooms() {
-  const isAuth = useAuth();
+  const isAlreadyAuth = useAuth();
   const router = useRouter();
   const [pageloading, setPageLoading] = useState(true);
-  const { id, loading } = useSelector(userSelector);
+  const { id, loading, isAuth } = useSelector(userSelector);
   useEffect(() => {
     if (!isAuth && !loading) {
       router.push("/");

@@ -34,8 +34,6 @@ export const UserData = () => {
     try {
       let payload = {};
       if (img) {
-        console.log(img);
-
         const url = await uploadImage(img);
         payload = { photoURL: url };
       }

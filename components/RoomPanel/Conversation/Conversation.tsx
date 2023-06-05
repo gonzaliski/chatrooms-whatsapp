@@ -15,7 +15,6 @@ export const Conversation = () => {
   const { shortId, name } = useSelector(chatSelector);
   const { file } = useSelector(imageSelector);
   const { id } = useSelector(userSelector);
-  console.log(participants.profilePictures);
 
   return (
     <div className="flex flex-col md:flex-grow h-full w-full h-full min-w-[70%]">

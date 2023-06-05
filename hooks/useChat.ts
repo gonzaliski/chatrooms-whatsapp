@@ -10,7 +10,6 @@ export function useChat() {
 
   useEffect(() => {
     const listenChat = onValue(ref(rtdb, "/rooms/" + roomId), (snapshot) => {
-      console.log("messages", snapshot.val());
       let currentMessages =
         snapshot.val() && Object.entries(snapshot.val()?.messages);
       setTimeout(() => {

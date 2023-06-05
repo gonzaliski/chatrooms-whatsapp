@@ -42,10 +42,14 @@ class UserService {
     if (photoURL) {
       payload = { ...payload, photoURL };
     }
+    let token = (await auth.currentUser?.getIdToken()) || "";
     return await axios.post(
       process.env.NEXT_PUBLIC_API_BASE_URL + "/auth",
       payload,
       {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { userId },
       }
     );
@@ -85,6 +89,7 @@ class UserService {
   }
 
   async updateParticipant(userId: string, name?: string, photoURL?: string) {
+    let token = (await auth.currentUser?.getIdToken()) || "";
     let payload = {};
     if (name) {
       payload = { name };
@@ -96,6 +101,9 @@ class UserService {
       process.env.NEXT_PUBLIC_API_BASE_URL + "/participant",
       payload,
       {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         params: { userId },
       }
     );
@@ -106,8 +114,6 @@ class UserService {
       if (auth.currentUser) {
         const { uid } = auth.currentUser;
         await updateProfile(auth.currentUser, updatableData);
-        console.log(updatableData.photoURL, updatableData.displayName);
-
         this.updateParticipant(
           uid,
           updatableData.displayName,

@@ -2,14 +2,11 @@ import { auth } from "@/firebase";
 import { parseUserCredentials } from "@/utils/parseUserCredentials";
 import { createSlice } from "@reduxjs/toolkit";
 
-console.log(auth.currentUser);
-
 const storagedUser = auth.currentUser
   ? parseUserCredentials(auth.currentUser)
   : null;
 const parsedUser =
   storagedUser !== null ? { ...storagedUser, isAuth: true } : null;
-console.log(parsedUser);
 const emptyState = {
   email: "",
   photoURL: "",

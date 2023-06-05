@@ -18,7 +18,6 @@ export const AttatchFile = ({
       if (file) {
         const objectUrl = URL.createObjectURL(file);
         onImg(file);
-        console.log(objectUrl);
         dispatch(setImage({ file: objectUrl }));
       }
     } catch (e: any) {

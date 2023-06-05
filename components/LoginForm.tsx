@@ -39,9 +39,13 @@ export const LoginForm = () => {
     }
   };
   const handleGoogleLogin = async () => {
-    const res = await userService.loginWithGoogle();
-    dispatch(setUserData(res));
-    router.push("/rooms");
+    try {
+      const res = await userService.loginWithGoogle();
+      dispatch(setUserData(res));
+      router.push("/rooms");
+    } catch (error: any) {
+      setError(error);
+    }
   };
 
   const handleCancel = () => {
