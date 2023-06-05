@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useAuth } from "@/hooks/useAuth";
-import Loading from "../Loading";
+import Loading from "../loading";
 
 export default function Rooms() {
   useAuth();

@@ -3,7 +3,7 @@ import "./globals.css";
 import { Providers } from "@/redux/provider";
 import { Suspense } from "react";
 import Head from "next/head";
-import Loading from "./Loading";
+import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
