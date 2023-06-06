@@ -9,13 +9,9 @@ export const LogOutButton = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const handleLogOut = async () => {
-    try {
-      router.push("/");
-      await userService.logOut();
-      dispatch(logOut());
-    } catch (error) {
-      console.error(error);
-    }
+    router.push("/");
+    await userService.logOut();
+    dispatch(logOut());
   };
   return (
     <MdOutlineLogout

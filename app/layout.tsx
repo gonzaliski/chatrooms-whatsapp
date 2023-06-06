@@ -2,7 +2,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/redux/provider";
 import { Suspense } from "react";
-import Head from "next/head";
 import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,9 +13,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <title>Chatrooms</title>
-      </Head>
+      </head>
       <body className={inter.className}>
         <Providers>
           <Suspense fallback={<Loading />}>

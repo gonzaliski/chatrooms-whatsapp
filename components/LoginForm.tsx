@@ -10,14 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { ErrorCard } from "./ErrorCard";
 import { MainForm } from "./MainForm";
 import { Spinner } from "./loaders/Spinner";
+import { UserData } from "./UserData";
 
 export const LoginForm = () => {
   useAuth();
   const router = useRouter();
   const [register, setRegister] = useState(true);
-  const { isAuth } = useSelector(userSelector);
+  const { isAuth, name } = useSelector(userSelector);
   const dispatch = useDispatch();
   const [loading, setIsLoading] = useState(true);
+  const [showFillProfile, setShowFillProfile] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,8 +29,8 @@ export const LoginForm = () => {
     setIsLoading(true);
     try {
       const res = await userService.signUp(email, password);
-      dispatch(setUserData({ res, isNew: true }));
-      router.push("/user");
+      dispatch(setUserData({ id: res.id, email: res.email }));
+      setShowFillProfile(true);
       setIsLoading(false);
     } catch (e: any) {
       setIsLoading(false);
@@ -43,8 +45,11 @@ export const LoginForm = () => {
     try {
       const res = await userService.signIn(email, password);
       dispatch(setUserData(res));
-
-      router.push("/rooms");
+      if (name) {
+        router.push("/rooms");
+      } else {
+        setShowFillProfile(true);
+      }
       setIsLoading(false);
     } catch (e: any) {
       setIsLoading(false);
@@ -65,10 +70,20 @@ export const LoginForm = () => {
     setRegister(true);
     setEmail("");
     setPassword("");
+    setError("");
   };
+
+  const handleEnableLogin = () => {
+    setError("");
+    setRegister(false);
+  };
+
   useEffect(() => {
-    if (isAuth) {
+    if (isAuth && name) {
       router.push("/rooms");
+    }
+    if (!isAuth) {
+      setShowFillProfile(false);
     }
     setIsLoading(false);
   }, [isAuth]);
@@ -81,39 +96,45 @@ export const LoginForm = () => {
         {register ? "Registrate para comenzar" : "Ingresar"}
       </h2>
 
-      <Auth
-        handleEmailChange={setEmail}
-        handlePassChange={setPassword}
-        email={email}
-        password={password}
-        handler={register ? handleRegister : handleLogin}
-        isDisabled={loading}
-      />
-      {!register && (
-        <button
-          className="flex items-center justify-center gap-3 px-3 text-sm w-full rounded-2xl border-2 border-solid border-red-500 text-white p-2"
-          onClick={handleCancel}
-        >
-          Cancelar
-        </button>
-      )}
-      {register && (
-        <div className="flex items-center justify-between w-full">
-          <p className="text-white">Ya tenés una cuenta?</p>
+      {showFillProfile ? (
+        <UserData />
+      ) : (
+        <>
+          <Auth
+            handleEmailChange={setEmail}
+            handlePassChange={setPassword}
+            email={email}
+            password={password}
+            handler={register ? handleRegister : handleLogin}
+            isDisabled={loading}
+          />
+          {!register && (
+            <button
+              className="flex items-center justify-center gap-3 px-3 text-sm w-full rounded-2xl border-2 border-solid border-red-500 text-white p-2"
+              onClick={handleCancel}
+            >
+              Cancelar
+            </button>
+          )}
+          {register && (
+            <div className="flex items-center justify-between w-full">
+              <p className="text-white">Ya tenés una cuenta?</p>
+              <button
+                className="rounded-2xl bg-wpp-darkblue text-white p-2 hover:brightness-75"
+                onClick={handleEnableLogin}
+              >
+                Ingresar
+              </button>
+            </div>
+          )}
           <button
-            className="rounded-2xl bg-wpp-darkblue text-white p-2 hover:brightness-75"
-            onClick={() => setRegister(false)}
+            className="flex items-center gap-3 px-3 text-md  rounded-2xl bg-wpp-darkblue text-white p-2"
+            onClick={handleGoogleLogin}
           >
-            Ingresar
+            <FcGoogle /> Ingresar con google
           </button>
-        </div>
+        </>
       )}
-      <button
-        className="flex items-center gap-3 px-3 text-md  rounded-2xl bg-wpp-darkblue text-white p-2"
-        onClick={handleGoogleLogin}
-      >
-        <FcGoogle /> Ingresar con google
-      </button>
       {error && <ErrorCard msg={error} />}
     </div>
   );

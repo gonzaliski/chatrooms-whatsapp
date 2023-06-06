@@ -21,7 +21,6 @@ class UserService {
         password
       );
       const { displayName, photoURL, uid, email } = userCredential.user;
-      this.syncUser(uid, displayName, photoURL);
       return {
         name: displayName,
         photoURL,

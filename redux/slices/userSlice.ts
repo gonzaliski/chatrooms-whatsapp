@@ -6,8 +6,8 @@ const initialState = {
   id: "",
   name: "",
   loading: true,
-  isAuth: false,
-  isNew: true,
+  isAuth: null,
+  isNew: null,
 };
 
 const userSlice = createSlice({

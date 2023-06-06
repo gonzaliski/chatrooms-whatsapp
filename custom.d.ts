@@ -40,8 +40,8 @@ interface UserState {
   photoURL: string;
   id: string;
   loading: boolean;
-  isAuth: boolean;
-  isNew: boolean;
+  isAuth: boolean | null;
+  isNew: boolean | null;
 }
 interface userState {
   user: UserState;

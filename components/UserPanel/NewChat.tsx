@@ -61,6 +61,7 @@ export const NewChat = () => {
   const disableAll = () => {
     setJoinEnabled(false);
     setCreateEnabled(false);
+    setIsLoading(false);
     setValue("");
     setError("");
   };
