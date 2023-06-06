@@ -22,6 +22,6 @@ export function getProfilePicture(
   }
   return "";
 }
-export function getRoomsByName(q: string, rooms: Room[]) {
-  return rooms.filter((room) => room[1].roomName.includes(q));
+export function getRoomsByName(q: string, rooms?: Room[]) {
+  return rooms?.filter((room) => room[1].roomName.includes(q));
 }

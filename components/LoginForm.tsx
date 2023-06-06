@@ -24,22 +24,30 @@ export const LoginForm = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await userService.signUp(email, password);
       dispatch(setUserData({ res, isNew: true }));
       router.push("/user");
+      setIsLoading(false);
     } catch (e: any) {
+      setIsLoading(false);
       setError(e.message);
     }
   };
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const res = await userService.signIn(email, password);
       dispatch(setUserData(res));
+
       router.push("/rooms");
+      setIsLoading(false);
     } catch (e: any) {
+      setIsLoading(false);
       setError(e.message);
     }
   };
@@ -79,6 +87,7 @@ export const LoginForm = () => {
         email={email}
         password={password}
         handler={register ? handleRegister : handleLogin}
+        isDisabled={loading}
       />
       {!register && (
         <button
@@ -115,6 +124,7 @@ const Auth = ({
   handlePassChange,
   email,
   password,
+  isDisabled,
   handler,
 }: AuthProps) => {
   return (
@@ -145,8 +155,11 @@ const Auth = ({
           required
         ></input>
       </div>
-      <button className="rounded-2xl bg-wpp-primary text-white p-2">
-        Enviar
+      <button
+        className="rounded-2xl bg-wpp-primary text-white p-2"
+        disabled={isDisabled}
+      >
+        {!isDisabled ? "Enviar" : <Spinner />}
       </button>
     </MainForm>
   );

@@ -88,6 +88,7 @@ type AuthProps = {
   handlePassChange: (e: string) => void;
   email: string;
   password: string;
+  isDisabled: boolean;
   handler: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 

@@ -64,7 +64,7 @@ export const UserData = () => {
               type="text"
               name="value"
               onChange={(e) => setValue(e.target.value)}
-              value={value || name}
+              defaultValue={name}
               disabled={isLoading}
               placeholder="Nombre"
               className="p-1 focus:outline-none rounded-md text-white bg-wpp-darkblue"
@@ -89,7 +89,7 @@ export const UserData = () => {
           <AttatchFile onError={handleError} onImg={setImg} />
           Seleccionar imagen
         </div>
-        {isNew && (
+        {!isNew && (
           <button
             className="rounded-md bg-wpp-darkblue text-white p-1 w-full self-end"
             type="button"

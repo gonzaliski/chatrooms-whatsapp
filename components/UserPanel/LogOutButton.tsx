@@ -10,8 +10,8 @@ export const LogOutButton = () => {
   const router = useRouter();
   const handleLogOut = async () => {
     try {
-      await userService.logOut();
       router.push("/");
+      await userService.logOut();
       dispatch(logOut());
     } catch (error) {
       console.error(error);

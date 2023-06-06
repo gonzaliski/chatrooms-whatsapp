@@ -43,6 +43,7 @@ class UserService {
       payload = { ...payload, photoURL };
     }
     let token = (await auth.currentUser?.getIdToken()) || "";
+
     return await axios.post(
       process.env.NEXT_PUBLIC_API_BASE_URL + "/auth",
       payload,
