@@ -80,13 +80,9 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (isAuth && name) {
-      console.log("ANDATEEE");
-
       router.push("/rooms");
     }
     // if (isAuth == null && !name) {
-    //   console.log("vovler atras");
-
     //   setShowFillProfile(false);
     // }
     setIsLoading(false);
