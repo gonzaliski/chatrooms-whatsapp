@@ -62,7 +62,7 @@ export const LoginForm = () => {
       dispatch(setUserData(res));
       router.push("/rooms");
     } catch (error: any) {
-      setError(error);
+      setError("Ha ocurrido un error");
     }
   };
 
@@ -80,11 +80,15 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (isAuth && name) {
+      console.log("ANDATEEE");
+
       router.push("/rooms");
     }
-    if (!isAuth) {
-      setShowFillProfile(false);
-    }
+    // if (isAuth == null && !name) {
+    //   console.log("vovler atras");
+
+    //   setShowFillProfile(false);
+    // }
     setIsLoading(false);
   }, [isAuth]);
 
@@ -96,9 +100,7 @@ export const LoginForm = () => {
         {register ? "Registrate para comenzar" : "Ingresar"}
       </h2>
 
-      {showFillProfile ? (
-        <UserData />
-      ) : (
+      {!showFillProfile ? (
         <>
           <Auth
             handleEmailChange={setEmail}
@@ -134,6 +136,8 @@ export const LoginForm = () => {
             <FcGoogle /> Ingresar con google
           </button>
         </>
+      ) : (
+        <UserData />
       )}
       {error && <ErrorCard msg={error} />}
     </div>

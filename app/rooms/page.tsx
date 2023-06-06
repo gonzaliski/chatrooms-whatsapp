@@ -14,7 +14,9 @@ export default function Rooms() {
   const [pageloading, setPageLoading] = useState(true);
   const { id, loading, isAuth } = useSelector(userSelector);
   useEffect(() => {
-    if (!isAuth && !loading) {
+    if (isAuth == null && loading) {
+      console.log("CHAU");
+
       router.push("/");
     }
     setPageLoading(false);

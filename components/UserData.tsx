@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import defaultUser from "../public/deafultUserPhoto.jpg";
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "./loaders/Spinner";
-import { logOut } from "@/redux/slices/userSlice";
+import { logOut, setUserData } from "@/redux/slices/userSlice";
 export const UserData = () => {
   useAuth();
   const { name, photoURL } = useSelector(userSelector);
@@ -30,7 +30,8 @@ export const UserData = () => {
     }, 4000);
   };
 
-  const handleUpdateUser = async () => {
+  const handleUpdateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     try {
       let payload = {};
@@ -43,6 +44,7 @@ export const UserData = () => {
       }
       await userService.updateData(payload);
       setIsLoading(false);
+      dispatch(setUserData(payload));
       dispatch(unselectImage());
       router.push("/rooms");
     } catch (e: any) {
@@ -97,6 +99,14 @@ export const UserData = () => {
         <AttatchFile onError={handleError} onImg={setImg} />
         Seleccionar imagen
       </div>
+
+      <button
+        className="rounded-md bg-wpp-primary text-white p-1 w-full self-end"
+        type="submit"
+        disabled={isLoading}
+      >
+        Guardar cambios
+      </button>
       <button
         className="rounded-md bg-wpp-darkblue text-white p-1 w-full self-end"
         type="button"
@@ -104,13 +114,6 @@ export const UserData = () => {
         disabled={isLoading}
       >
         Volver
-      </button>
-      <button
-        className="rounded-md bg-wpp-primary text-white p-1 w-full self-end"
-        type="submit"
-        disabled={isLoading}
-      >
-        Guardar cambios
       </button>
 
       {isLoading && <Spinner />}
