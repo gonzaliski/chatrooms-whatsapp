@@ -17,8 +17,9 @@ const chatSlice = createSlice({
         ...action.payload,
       };
     },
+    reset: () => initialState,
   },
 });
 
-export const { selectChat } = chatSlice.actions;
+export const { selectChat, reset } = chatSlice.actions;
 export default chatSlice.reducer;

@@ -62,6 +62,7 @@ export const NewChat = () => {
     setJoinEnabled(false);
     setCreateEnabled(false);
     setIsLoading(false);
+    setDisabled(false);
     setValue("");
     setError("");
   };

@@ -1,4 +1,5 @@
 "use client";
+import { reset } from "@/redux/slices/chatSlice";
 import { logOut } from "@/redux/slices/userSlice";
 import { userService } from "@/services/userService";
 import { useRouter } from "next/navigation";
@@ -12,6 +13,7 @@ export const LogOutButton = () => {
     router.push("/");
     await userService.logOut();
     dispatch(logOut());
+    dispatch(reset());
   };
   return (
     <MdOutlineLogout

@@ -16,7 +16,7 @@ export const ChatCard = ({
   const { id } = useSelector(userSelector);
   let timeStampDate = timeStamp?.toDate();
   let messageFrom =
-    lastMessage.id !== undefined
+    lastMessage?.id !== undefined
       ? lastMessage.id == id
         ? "Tú: "
         : lastMessage?.from + ": "
