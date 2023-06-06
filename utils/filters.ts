@@ -23,5 +23,7 @@ export function getProfilePicture(
   return "";
 }
 export function getRoomsByName(q: string, rooms?: Room[]) {
-  return rooms?.filter((room) => room[1].roomName.includes(q));
+  return rooms?.filter((room) =>
+    room[1].roomName.toLowerCase().includes(q.toLowerCase())
+  );
 }
