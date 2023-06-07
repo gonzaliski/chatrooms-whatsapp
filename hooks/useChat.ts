@@ -9,13 +9,17 @@ export function useChat() {
   const { shortId, roomId } = useSelector(chatSelector);
 
   useEffect(() => {
-    const listenChat = onValue(ref(rtdb, "/rooms/" + roomId), (snapshot) => {
-      let currentMessages =
-        snapshot.val() && Object.entries(snapshot.val()?.messages);
-      setTimeout(() => {
-        setMessages(currentMessages);
-      }, 400);
-    });
+    const listenChat = onValue(
+      ref(rtdb, "/rooms/" + roomId),
+      (snapshot) => {
+        let currentMessages =
+          snapshot.val() && Object.entries(snapshot.val()?.messages);
+        setTimeout(() => {
+          setMessages(currentMessages);
+        }, 400);
+      },
+      (e) => console.error(e)
+    );
     return () => {
       // Detiene la escucha de cambios
       listenChat();

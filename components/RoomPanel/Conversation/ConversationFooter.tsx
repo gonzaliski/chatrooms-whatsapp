@@ -54,7 +54,10 @@ export const ConversationFooter = ({
       );
       setValue("");
     } catch (error: any) {
-      setError(error);
+      console.error(error);
+      setTimeout(() => {
+        setError("Ocurrió un problema con el envío de mensaje");
+      }, 4000);
     }
   };
   useEffect(() => {
