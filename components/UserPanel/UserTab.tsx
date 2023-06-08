@@ -1,10 +1,10 @@
 "use client";
-import { useAuth } from "@/hooks/useAuth";
 import { userSelector } from "@/redux/selectors";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import { MdChat, MdGroups } from "react-icons/md";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { MdGroups } from "react-icons/md";
 import { useSelector } from "react-redux";
 import defaultUser from "../../public/deafultUserPhoto.jpg";
 import { LogOutButton } from "./LogOutButton";
@@ -24,9 +24,15 @@ export const UserTab = () => {
       />
       <div className="flex items-center justify-between gap-5">
         <MdGroups className="text-gray-400 text-3xl" />
+        <Link
+          href={"https://www.linkedin.com/in/gonzalo-mendez-stefano-60b800236/"}
+        >
+          <FaLinkedin className="text-gray-400 text-2xl hover:brightness-150" />
+        </Link>
+        <Link href={"https://github.com/gonzaliski/chatrooms-whatsapp"}>
+          <FaGithub className="text-gray-400 text-2xl hover:brightness-150" />
+        </Link>
         <LogOutButton />
-        <MdChat className="text-gray-400 text-2xl" />
-        <HiOutlineDotsVertical className="text-gray-400 text-2xl" />
       </div>
     </div>
   );
