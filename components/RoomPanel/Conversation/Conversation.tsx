@@ -26,7 +26,7 @@ export const Conversation = () => {
       />
       {!file ? (
         <ConversationPanel
-          id={id}
+          userId={id}
           profilePictures={participants.profilePictures}
           participants={participants.participants}
         />

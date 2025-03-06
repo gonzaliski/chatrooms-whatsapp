@@ -1,11 +1,12 @@
 type Message = {
-  incoming: boolean;
+  id: string;
+  incoming?: boolean;
   message: message;
   from: string;
   timeStamp: any;
   prevIsFromOther: boolean;
-  isLast: boolean;
-  profilePicture: string;
+  isLast?: boolean;
+  profilePicture?: string;
 };
 
 type LSUserCredentials = {
@@ -104,4 +105,11 @@ type UserTabProps = {
 type participantsData = {
   profilePictures: any[];
   participants: participant[];
+};
+type UserData = {
+  createdAt: date;
+  id: string;
+  name: string;
+  photoURL: string;
+  username: string;
 };

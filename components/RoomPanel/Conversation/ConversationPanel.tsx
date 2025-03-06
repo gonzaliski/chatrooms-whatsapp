@@ -5,11 +5,11 @@ import { useEffect, useRef } from "react";
 import { getMessageSource, getProfilePicture } from "@/utils/filters";
 
 export const ConversationPanel = ({
-  id,
+  userId,
   profilePictures,
   participants,
 }: {
-  id: string;
+  userId: string;
   profilePictures: participantsData["profilePictures"];
   participants: participantsData["participants"];
 }) => {
@@ -32,8 +32,9 @@ export const ConversationPanel = ({
               : true;
             return (
               <Message
-                key={m[0]}
-                incoming={m[1].id !== id}
+                id={m.id}
+                key={m.id}
+                incoming={m[1].id !== userId}
                 message={m[1].message}
                 from={participants && getMessageSource(m[1].id, participants)}
                 timeStamp={m[1].timeStamp}
