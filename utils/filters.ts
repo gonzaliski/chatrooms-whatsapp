@@ -22,8 +22,10 @@ export function getProfilePicture(
   }
   return "";
 }
-export function getRoomsByName(q: string, rooms?: Room[]) {
-  return rooms?.filter((room) =>
-    room[1].roomName.toLowerCase().includes(q.toLowerCase())
+export function getRoomsByName(q: string, rooms: Room[] | null) {
+  return (
+    rooms?.filter((room) =>
+      room.contactName.toLowerCase().includes(q.toLowerCase())
+    ) || null
   );
 }

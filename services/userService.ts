@@ -17,10 +17,14 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  onSnapshot,
   query,
+  serverTimestamp,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
+import { chatService } from "./chatService";
 
 class UserService {
   async signIn(emailSignIn: string, password: string) {

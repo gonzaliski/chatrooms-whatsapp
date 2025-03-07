@@ -1,31 +1,38 @@
 import { db } from "@/firebase";
-import { chatListFilterSelector, userSelector } from "@/redux/selectors";
-import { getRoomsByName } from "@/utils/filters";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { chatService } from "@/services/chatService";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-export function useUserChats() {
-  const [isLoading, setIsLoading] = useState(false);
-  const { id } = useSelector(userSelector);
-  const { filter } = useSelector(chatListFilterSelector);
-  const [rooms, setRooms] = useState([] as any);
-
+export const useUserChats = (userId: string) => {
+  const [userChats, setUserChats] = useState<userChat[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const getChats = () => {
-      setIsLoading(true);
-      const unsub = onSnapshot(doc(collection(db, "usersChat"), id), (doc) => {
-        let data = doc.data();
-        let chats = data && Object.entries(data);
-        setRooms(chats);
-        setIsLoading(false);
-      });
-      return () => {
-        unsub();
-      };
+    const unSub = onSnapshot(doc(db, "userchats", userId), async (res) => {
+      const items = res.data()!!.chats;
+      console.log(items);
+      if (items) {
+        const promises = items.map(async (item: any) => {
+          const userDocRef = doc(db, "users", item.contactData.id);
+          const userDocSnap = await getDoc(userDocRef);
+
+          const user = userDocSnap.data();
+
+          return { ...item, user };
+        });
+
+        const chatData = await Promise.all(promises);
+
+        setUserChats(chatData.sort((a, b) => b.timestamp - a.timestamp));
+        setLoading(false);
+      } else {
+        setUserChats([]);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      unSub();
     };
-    setRooms(getRoomsByName(filter, rooms));
-    id && !filter && getChats();
-  }, [id, filter]);
-  return [rooms, isLoading];
-}
+  }, [userId]);
+  return { userChats, loading };
+};
