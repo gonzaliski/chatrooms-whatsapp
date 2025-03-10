@@ -15,7 +15,7 @@ export const ChatCardList = () => {
   const { filter } = useSelector(chatListFilterSelector);
   const dispatch = useDispatch();
   const handleSelect = (room: RoomSelection) => {
-    setSelected(room.roomId);
+    setSelected(room.chatId);
     dispatch(selectChat(room));
   };
   return (
@@ -29,21 +29,19 @@ export const ChatCardList = () => {
       {loading ? (
         <ChatCardSkeleton />
       ) : (
-        userChats
-          .sort((a: any, b: any) => b.timestamp - a.timestamp)
-          .map((chat: userChat) => (
-            <ChatCard
-              key={chat.chatId}
-              roomId={chat.chatId}
-              contact={chat.contactData}
-              lastMessage={chat.lastMessage}
-              lastMessageFrom={chat.lastMessageFrom}
-              timeStamp={chat.timestamp}
-              onSelect={handleSelect}
-              selected={selected == chat.chatId ? true : false}
-              shortId={""}
-            />
-          ))
+        userChats.map((chat: userChat) => (
+          <ChatCard
+            key={chat.chatId}
+            roomId={chat.chatId}
+            contact={chat.contactData}
+            lastMessage={chat.lastMessage}
+            lastMessageFrom={chat.lastMessageFrom as string}
+            timeStamp={chat.timestamp}
+            onSelect={handleSelect}
+            selected={selected == chat.chatId ? true : false}
+            isSeen={chat.isSeen}
+          />
+        ))
       )}
     </div>
   );

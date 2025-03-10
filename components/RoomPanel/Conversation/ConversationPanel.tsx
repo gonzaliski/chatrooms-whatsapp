@@ -1,58 +1,65 @@
 "use client";
-import { useChat } from "@/hooks/useChat";
-import { Message } from "./Message";
+import { Spinner } from "@/components/loaders/Spinner";
+import { useChatMessages } from "@/hooks/useChat";
+import { chatService } from "@/services/chatService";
 import { useEffect, useRef } from "react";
-import { getMessageSource, getProfilePicture } from "@/utils/filters";
+import { Message } from "./Message";
 
 export const ConversationPanel = ({
+  chatId,
   userId,
-  profilePictures,
-  participants,
+  profilePicture,
 }: {
+  chatId: string;
   userId: string;
-  profilePictures: participantsData["profilePictures"];
-  participants: participantsData["participants"];
+  profilePicture: participantsData["profilePictures"];
 }) => {
-  const [messages, shortId] = useChat();
+  const { messages, loading } = useChatMessages(chatId);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    if (messages.length > 0) {
+      console.log("Marcado como visto");
+      chatService.markMessagesAsSeen(userId, chatId); // 📌 Marcar como vistos al recibir mensajes
+    }
+
     messages && messagesEndRef.current?.scrollTo({ behavior: "auto" });
-  }, []);
+  }, [messages, userId, chatId]);
   return (
     <div className="h-full w-full relative overflow-auto bg-conversation-panel">
-      <div className="h-full w-full bg-wpp_chat bg-repeat opacity-5 absolute object-cover -z-9"></div>{" "}
+      <div className="h-full w-full bg-wpp_chat bg-repeat opacity-5 absolute object-cover -z-9"></div>
+
       <div className="flex flex-col relative z-10 h-full w-full overflow-auto">
+        {loading && (
+          <div className="self-center">
+            <Spinner />
+          </div>
+        )}
         <div className="w-full my-8" />
-        {messages ? (
-          messages?.map((m: any, idx: any) => {
+        {!loading &&
+          messages?.map((m: ChatMessage, idx: any) => {
             let prevMessage = idx > 0 ? messages[idx - 1] : null;
             let nextMessage = messages[idx + 1];
             let shouldHaveNoCorner = prevMessage
-              ? prevMessage[1].id !== m[1].id
+              ? prevMessage.idFrom !== m.idFrom
               : true;
             return (
               <Message
-                id={m.id}
-                key={m.id}
-                incoming={m[1].id !== userId}
-                message={m[1].message}
-                from={participants && getMessageSource(m[1].id, participants)}
-                timeStamp={m[1].timeStamp}
+                id={m.messageId}
+                key={m.messageId}
+                incoming={m.idFrom !== userId}
+                messageText={m.message.text || ""}
+                messageImg={m.message.img || ""}
+                timeStamp={m.timestamp}
                 prevIsFromOther={shouldHaveNoCorner}
                 isLast={
-                  nextMessage == undefined || nextMessage[1].id !== m[1].id
+                  nextMessage == undefined || nextMessage.idFrom !== m.idFrom
                 }
-                profilePicture={
-                  profilePictures && getProfilePicture(m[1].id, profilePictures)
-                }
+                profilePicture={profilePicture}
+                from={m.idFrom}
               />
             );
-          })
-        ) : (
-          <h2 className="text-white text-center font-thin text-xl sm:text-2xl md:text-3xl">
-            Compartí el código <b>{shortId}</b> para empezar a chatear
-          </h2>
-        )}
+          })}
         {messages && <div ref={messagesEndRef} />}
       </div>
     </div>

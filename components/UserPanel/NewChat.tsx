@@ -8,7 +8,7 @@ import { Modal } from "../Modal";
 import { Spinner } from "../loaders/Spinner";
 import { CreateChat } from "./CreateChat";
 export const NewChat = () => {
-  const { id } = useSelector(userSelector);
+  const { id, photoURL, name } = useSelector(userSelector);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [joinEnabled, setJoinEnabled] = useState(false);
@@ -23,7 +23,16 @@ export const NewChat = () => {
     setDisabled(true);
     setIsLoading(true);
     try {
-      await chatService.getOrCreateChatRoom(id, selectedUser!!);
+      await chatService.getOrCreateChatRoom(
+        {
+          id,
+          photoURL,
+          name,
+          createdAt: undefined,
+          username: "",
+        },
+        selectedUser!!
+      );
       setIsLoading(false);
       onClose();
     } catch (e: any) {

@@ -49,25 +49,21 @@ class UserService {
   }
 
   async syncUser(userId: string, name: string | null, photoURL: string | null) {
-    let payload = {};
-    if (name) {
-      payload = { name };
-    }
-    if (photoURL) {
-      payload = { ...payload, photoURL };
-    }
-    let token = (await auth.currentUser?.getIdToken()) || "";
+    if (!name && !photoURL) return; // No actualizar si no hay cambios
 
-    return await axios.post(
-      process.env.NEXT_PUBLIC_API_BASE_URL + "/auth",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { userId },
-      }
-    );
+    const payload: Record<string, string> = {};
+    if (name) payload.name = name;
+    if (photoURL) payload.photoURL = photoURL;
+
+    try {
+      // 📌 Referencia al documento del usuario en Firestore
+      const userRef = doc(db, "users", userId);
+
+      // 🚀 Actualizar el documento en Firestore
+      await updateDoc(userRef, payload);
+    } catch (error) {
+      console.error("Error sincronizando el usuario:", error);
+    }
   }
   async ensureUserExists(
     uid: string,
@@ -130,24 +126,45 @@ class UserService {
   }
 
   async updateParticipant(userId: string, name?: string, photoURL?: string) {
-    let token = (await auth.currentUser?.getIdToken()) || "";
-    let payload = {};
-    if (name) {
-      payload = { name };
+    if (!name && !photoURL) return;
+
+    const payload: Record<string, string> = {};
+    if (name) payload.name = name;
+    if (photoURL) payload.photoURL = photoURL;
+
+    try {
+      // 🔍 1️⃣ Obtener todos los documentos de `userchats` donde `userId` participa
+      const userChatsRef = collection(db, "userchats");
+      const q = query(
+        userChatsRef,
+        where("chats.contactData.id", "==", userId)
+      );
+      const querySnapshot = await getDocs(q);
+
+      // 🔄 2️⃣ Iterar sobre cada documento y actualizar la información
+      const updates = querySnapshot.docs.map(async (docSnap) => {
+        const userChatRef = docSnap.ref; // Referencia al documento
+        const userChatsData = docSnap.data();
+
+        // 📌 3️⃣ Mapear los chats y actualizar la info del usuario
+        const updatedChats = userChatsData.chats.map((chat: any) => {
+          if (chat.contactData.id === userId) {
+            return {
+              ...chat,
+              contactData: { ...chat.contactData, ...payload },
+            };
+          }
+          return chat;
+        });
+
+        // 🚀 4️⃣ Guardar los cambios en Firestore
+        return updateDoc(userChatRef, { chats: updatedChats });
+      });
+
+      await Promise.all(updates); // Esperar todas las actualizaciones
+    } catch (error) {
+      console.error("Error actualizando los participantes:", error);
     }
-    if (photoURL) {
-      payload = { ...payload, photoURL };
-    }
-    return await axios.put(
-      process.env.NEXT_PUBLIC_API_BASE_URL + "/participant",
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { userId },
-      }
-    );
   }
 
   async updateData(updatableData: UpdatableData) {

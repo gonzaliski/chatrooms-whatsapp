@@ -8,7 +8,6 @@ export const useUserSearch = (searchQuery: string) => {
   const [searchError, setSearchError] = useState("");
 
   useEffect(() => {
-    console.log(searchQuery);
     if (searchQuery.trim() === "") {
       setUsers([]);
       return;

@@ -1,7 +1,8 @@
 type Message = {
   id: string;
   incoming?: boolean;
-  message: message;
+  messageText: string;
+  messageImg: string;
   from: string;
   timeStamp: any;
   prevIsFromOther: boolean;
@@ -26,13 +27,13 @@ type ChatCard = {
 };
 
 type ChatCardProps = {
-  shortId: string;
   roomId: string;
   contact: userDTO;
   lastMessage: message;
   lastMessageFrom: string;
   timeStamp: any;
   selected: boolean;
+  isSeen: boolean;
   onSelect: (a: RoomSelection) => any;
 };
 interface UserState {
@@ -52,11 +53,11 @@ type participant = {
   name: string;
 };
 type RoomSelection = {
-  roomId: string;
-  contactName: string;
+  chatId: string;
+  contactData: userDTO;
 };
 interface chatState {
-  chat: userChat;
+  chat: RoomSelection;
 }
 interface imageState {
   image: { file: string; pendingToSend: boolean };
@@ -64,6 +65,12 @@ interface imageState {
 interface chatListState {
   chatListFilter: { filter: string };
 }
+type ChatMessage = {
+  idFrom: string;
+  message: message;
+  timestamp: string;
+  messageId: string;
+};
 
 type Room = {
   id: string;
@@ -73,20 +80,21 @@ type Room = {
   lastMessage: message;
   timestamp: any;
 };
-interface userChat {
+type userChat = {
   chatId: string;
-  lastMessage: string;
+  lastMessage: message;
   contactData: userDTO;
-  lastMessageFrom: string;
+  lastMessageFrom?: string;
   timestamp: any;
-}
+  isSeen: boolean;
+};
 interface userDTO {
   id: string;
   photoURL: string;
   name: string;
 }
 
-type message = { text?: string; img?: string } | string;
+type message = { text?: string; img?: string };
 
 type AuthProps = {
   handleEmailChange: (e: string) => void;
@@ -107,8 +115,7 @@ type UserTabProps = {
 };
 
 type participantsData = {
-  profilePictures: any[];
-  participants: participant[];
+  profilePictures: string;
 };
 type UserData = {
   createdAt: date;

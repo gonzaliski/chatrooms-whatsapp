@@ -1,4 +1,3 @@
-import { useParticipants } from "@/hooks/useParticipants";
 import { chatSelector, imageSelector, userSelector } from "@/redux/selectors";
 import { unselectImage } from "@/redux/slices/imageSlice";
 import Image from "next/image";
@@ -9,7 +8,6 @@ import { ConversationFooter } from "./ConversationFooter";
 import { ConversationPanel } from "./ConversationPanel";
 
 export const Conversation = () => {
-  const participants = useParticipants();
   const { chatId, contactData } = useSelector(chatSelector);
   const { file } = useSelector(imageSelector);
   const { id } = useSelector(userSelector);
@@ -19,17 +17,14 @@ export const Conversation = () => {
       <ChatHeader name={contactData.name} avatar={contactData.photoURL} />
       {!file ? (
         <ConversationPanel
+          chatId={chatId}
           userId={id}
-          profilePictures={participants.profilePictures}
-          participants={participants.participants}
+          profilePicture={contactData.photoURL}
         />
       ) : (
         <ImagePreview file={file} />
       )}
-      <ConversationFooter
-        participants={participants.participants}
-        shortId={chatId}
-      />
+      <ConversationFooter contactId={contactData.id} chatId={chatId} />
     </div>
   );
 };
