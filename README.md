@@ -1,5 +1,5 @@
 # Chatrooms - Imitación Whatsapp
-Rework de un proyecto que realicé en Apx School (Carrera de desarrollo web fullstack). En esta aplicación web se pueden crear salas para chatear en grupos de hasta 20 personas. Proximamente se realizará un aplicacion nativa para celulares.
+En esta aplicación web se pueden chatear en tiempo real con diferentes usuarios.
 ## Features:
 - Autenticación con email/password y google.
 - Nombre y foto de perfil personalizable.
