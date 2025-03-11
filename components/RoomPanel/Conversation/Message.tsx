@@ -6,7 +6,6 @@ export const Message = ({
   incoming,
   messageText,
   messageImg,
-  from,
   timeStamp,
   prevIsFromOther,
   isLast,
@@ -45,7 +44,7 @@ export const Message = ({
       )}
       <div
         ref={ref}
-        className={`max-w-[65%] break-words ${color} text-white px-[9px] pr-[50px] pt-[6px] pb-[8px] rounded-lg ${shouldShowFullScheme} relative shadow-black shadow-sm text-sm font-light`}
+        className={`max-w-[65%] break-words ${color} text-white px-[9px] pr-[50px] pt-[6px] pb-[8px] rounded-lg ${shouldShowFullScheme} relative text-sm font-light`}
       >
         {messageImg ? (
           <>
