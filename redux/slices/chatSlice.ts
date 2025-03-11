@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  shortId: "",
-  roomId: "",
-  name: "",
-  participants: [],
-} as RoomSelection;
+const initialState: RoomSelection = {
+  chatId: "",
+  contactData: {
+    id: "",
+    name: "",
+    photoURL: "",
+  },
+};
 
 const chatSlice = createSlice({
   name: "chat",

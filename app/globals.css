@@ -4,7 +4,7 @@
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: black rgb(79, 78, 78);
+  scrollbar-color: rgb(79, 78, 78) transparent;
 }
 
 /* Chrome, Edge, and Safari */

@@ -1,11 +1,13 @@
 type Message = {
-  incoming: boolean;
-  message: message;
+  id: string;
+  incoming?: boolean;
+  messageText: string;
+  messageImg: string;
   from: string;
   timeStamp: any;
   prevIsFromOther: boolean;
-  isLast: boolean;
-  profilePicture: string;
+  isLast?: boolean;
+  profilePicture?: string;
 };
 
 type LSUserCredentials = {
@@ -25,13 +27,13 @@ type ChatCard = {
 };
 
 type ChatCardProps = {
-  shortId: string;
   roomId: string;
-  participants: participant[];
-  name: string;
+  contact: userDTO;
   lastMessage: message;
+  lastMessageFrom: string;
   timeStamp: any;
   selected: boolean;
+  isSeen: boolean;
   onSelect: (a: RoomSelection) => any;
 };
 interface UserState {
@@ -51,9 +53,8 @@ type participant = {
   name: string;
 };
 type RoomSelection = {
-  shortId: string;
-  roomId: string;
-  name: string;
+  chatId: string;
+  contactData: userDTO;
 };
 interface chatState {
   chat: RoomSelection;
@@ -64,24 +65,36 @@ interface imageState {
 interface chatListState {
   chatListFilter: { filter: string };
 }
-
-type Room = [
-  string,
-  {
-    participants: participant[];
-    roomShortId: string;
-    roomName: string;
-    lastMessage: message;
-    timeStamp: any;
-  }
-];
-
-type message = {
-  text: string;
-  img: string;
-  from: string;
-  id: string;
+type ChatMessage = {
+  idFrom: string;
+  message: message;
+  timestamp: string;
+  messageId: string;
 };
+
+type Room = {
+  id: string;
+  contactName: string;
+  contactId: string;
+  photoURL: string;
+  lastMessage: message;
+  timestamp: any;
+};
+type userChat = {
+  chatId: string;
+  lastMessage: message;
+  contactData: userDTO;
+  lastMessageFrom?: string;
+  timestamp: any;
+  isSeen: boolean;
+};
+interface userDTO {
+  id: string;
+  photoURL: string;
+  name: string;
+}
+
+type message = { text?: string; img?: string };
 
 type AuthProps = {
   handleEmailChange: (e: string) => void;
@@ -102,6 +115,12 @@ type UserTabProps = {
 };
 
 type participantsData = {
-  profilePictures: any[];
-  participants: participant[];
+  profilePictures: string;
+};
+type UserData = {
+  createdAt: date;
+  id: string;
+  name: string;
+  photoURL: string;
+  username: string;
 };
