@@ -1,5 +1,5 @@
 # Chatrooms - Imitación Whatsapp
-En esta aplicación web se pueden chatear en tiempo real con diferentes usuarios.
+En esta aplicación web permite chatear en tiempo real con diferentes usuarios.
 ## Features:
 - Autenticación con email/password y google.
 - Nombre y foto de perfil personalizable.
