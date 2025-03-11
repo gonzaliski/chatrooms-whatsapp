@@ -1,13 +1,11 @@
 type Message = {
-  id: string;
-  incoming?: boolean;
-  messageText: string;
-  messageImg: string;
+  incoming: boolean;
+  message: message;
   from: string;
   timeStamp: any;
   prevIsFromOther: boolean;
-  isLast?: boolean;
-  profilePicture?: string;
+  isLast: boolean;
+  profilePicture: string;
 };
 
 type LSUserCredentials = {
@@ -27,13 +25,13 @@ type ChatCard = {
 };
 
 type ChatCardProps = {
+  shortId: string;
   roomId: string;
-  contact: userDTO;
+  participants: participant[];
+  name: string;
   lastMessage: message;
-  lastMessageFrom: string;
   timeStamp: any;
   selected: boolean;
-  isSeen: boolean;
   onSelect: (a: RoomSelection) => any;
 };
 interface UserState {
@@ -53,8 +51,9 @@ type participant = {
   name: string;
 };
 type RoomSelection = {
-  chatId: string;
-  contactData: userDTO;
+  shortId: string;
+  roomId: string;
+  name: string;
 };
 interface chatState {
   chat: RoomSelection;
@@ -65,36 +64,24 @@ interface imageState {
 interface chatListState {
   chatListFilter: { filter: string };
 }
-type ChatMessage = {
-  idFrom: string;
-  message: message;
-  timestamp: string;
-  messageId: string;
-};
 
-type Room = {
-  id: string;
-  contactName: string;
-  contactId: string;
-  photoURL: string;
-  lastMessage: message;
-  timestamp: any;
-};
-type userChat = {
-  chatId: string;
-  lastMessage: message;
-  contactData: userDTO;
-  lastMessageFrom?: string;
-  timestamp: any;
-  isSeen: boolean;
-};
-interface userDTO {
-  id: string;
-  photoURL: string;
-  name: string;
-}
+type Room = [
+  string,
+  {
+    participants: participant[];
+    roomShortId: string;
+    roomName: string;
+    lastMessage: message;
+    timeStamp: any;
+  }
+];
 
-type message = { text?: string; img?: string };
+type message = {
+  text: string;
+  img: string;
+  from: string;
+  id: string;
+};
 
 type AuthProps = {
   handleEmailChange: (e: string) => void;
@@ -115,12 +102,6 @@ type UserTabProps = {
 };
 
 type participantsData = {
-  profilePictures: string;
-};
-type UserData = {
-  createdAt: date;
-  id: string;
-  name: string;
-  photoURL: string;
-  username: string;
+  profilePictures: any[];
+  participants: participant[];
 };

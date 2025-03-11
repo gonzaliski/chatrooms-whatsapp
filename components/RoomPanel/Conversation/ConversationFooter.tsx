@@ -3,7 +3,7 @@ import { AttatchFile } from "@/components/AttatchFile";
 import { ConversationInput } from "@/components/RoomPanel/Conversation/ConversationInput";
 import { imageSelector, userSelector } from "@/redux/selectors";
 import { unselectImage } from "@/redux/slices/imageSlice";
-import { chatService } from "@/services/chatService";
+import { roomService } from "@/services/roomService";
 import { uploadImage } from "@/utils/uploadImage";
 import { FormEvent, useEffect, useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -12,14 +12,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { ErrorCard } from "../../ErrorCard";
 
 export const ConversationFooter = ({
-  chatId,
-  contactId,
+  shortId,
+  participants,
 }: {
-  chatId: string;
-  contactId: string;
+  shortId: string;
+  participants: participant[];
 }) => {
   const { file } = useSelector(imageSelector);
-  const { id } = useSelector(userSelector);
+  const { id, name, photoURL } = useSelector(userSelector);
   const [value, setValue] = useState("");
   const [img, setImg] = useState<Blob>();
   const [error, setError] = useState("");
@@ -37,8 +37,6 @@ export const ConversationFooter = ({
 
   const pushMessage = async (e: FormEvent) => {
     e.preventDefault();
-    const textValue = value;
-    setValue("");
     try {
       let imgURL = "";
       if (img) {
@@ -46,10 +44,15 @@ export const ConversationFooter = ({
         setImg(undefined);
         dispatch(unselectImage());
       }
-      await chatService.sendMessage(chatId, id, contactId, {
-        text: textValue,
-        img: imgURL,
-      });
+      await roomService.pushMessage(
+        { text: value, img: imgURL },
+        participants,
+        shortId,
+        id,
+        name,
+        photoURL
+      );
+      setValue("");
     } catch (error: any) {
       console.error(error);
       setTimeout(() => {

@@ -80,7 +80,6 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (isAuth && name) {
-      setError("");
       router.push("/rooms");
     }
     // if (isAuth == null && !name) {

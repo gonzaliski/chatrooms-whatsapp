@@ -6,8 +6,8 @@ import AppLogo from "../../public/chatrooms-icon.png";
 import { Conversation } from "./Conversation/Conversation";
 
 export const RoomPanel = () => {
-  const { chatId } = useSelector(chatSelector);
-  return !chatId ? <RoomPreview /> : <Conversation />;
+  const { roomId } = useSelector(chatSelector);
+  return !roomId ? <RoomPreview /> : <Conversation />;
 };
 
 const RoomPreview = () => {

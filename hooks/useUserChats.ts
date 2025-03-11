@@ -1,22 +1,31 @@
-import { chatService } from "@/services/chatService";
+import { db } from "@/firebase";
+import { chatListFilterSelector, userSelector } from "@/redux/selectors";
 import { getRoomsByName } from "@/utils/filters";
+import { collection, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-export const useUserChats = (userId: string, filter: string) => {
-  const [userChats, setUserChats] = useState<userChat[]>([]);
-  const [loading, setLoading] = useState(true);
+export function useUserChats() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { id } = useSelector(userSelector);
+  const { filter } = useSelector(chatListFilterSelector);
+  const [rooms, setRooms] = useState([] as any);
 
   useEffect(() => {
-    if (!userId) return;
-    const unSub = chatService.listenUserChats(userId, (chats) => {
-      setUserChats(getRoomsByName(filter, chats));
-      setLoading(false);
-    });
-
-    return () => {
-      unSub();
+    const getChats = () => {
+      setIsLoading(true);
+      const unsub = onSnapshot(doc(collection(db, "usersChat"), id), (doc) => {
+        let data = doc.data();
+        let chats = data && Object.entries(data);
+        setRooms(chats);
+        setIsLoading(false);
+      });
+      return () => {
+        unsub();
+      };
     };
-  }, [userId, filter]);
-
-  return { userChats, loading };
-};
+    setRooms(getRoomsByName(filter, rooms));
+    id && !filter && getChats();
+  }, [id, filter]);
+  return [rooms, isLoading];
+}

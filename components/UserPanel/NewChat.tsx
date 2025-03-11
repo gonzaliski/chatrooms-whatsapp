@@ -1,14 +1,16 @@
 "use client";
 import { userSelector } from "@/redux/selectors";
-import { chatService } from "@/services/chatService";
-import { FormEvent, useState } from "react";
+import { roomService } from "@/services/roomService";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { MdAdd, MdClear, MdOutlineKeyboardBackspace } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { ErrorCard } from "../ErrorCard";
+import { MainForm } from "../MainForm";
 import { Modal } from "../Modal";
 import { Spinner } from "../loaders/Spinner";
-import { CreateChat } from "./CreateChat";
+
 export const NewChat = () => {
-  const { id, photoURL, name } = useSelector(userSelector);
+  const { id } = useSelector(userSelector);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [joinEnabled, setJoinEnabled] = useState(false);
@@ -16,56 +18,43 @@ export const NewChat = () => {
   const [disabled, setDisabled] = useState(false);
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
-
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
-
-  const handleCreateRoom = async () => {
+  const handleCreateRoom = async (e: FormEvent) => {
     setDisabled(true);
     setIsLoading(true);
+    e.preventDefault();
     try {
-      await chatService.getOrCreateChatRoom(
-        {
-          id,
-          photoURL,
-          name,
-          createdAt: undefined,
-          username: "",
-        },
-        selectedUser!!
-      );
+      await roomService.createRoom(value, id);
       setIsLoading(false);
       onClose();
     } catch (e: any) {
-      setError(e);
+      setError(e.response.data.message);
       setIsLoading(false);
     }
   };
-  // const handleJoinRoom = async (e: FormEvent) => {
-  //   setDisabled(true);
-  //   setIsLoading(true);
+  const handleJoinRoom = async (e: FormEvent) => {
+    setDisabled(true);
+    setIsLoading(true);
 
-  //   e.preventDefault();
-  //   try {
-  //     await roomService.joinRoom(value, id);
-  //     setIsLoading(false);
-  //     onClose();
-  //   } catch (e: any) {
-  //     setError(e.response.data.message);
-  //     setIsLoading(false);
-  //   }
-  // };
+    e.preventDefault();
+    try {
+      await roomService.joinRoom(value, id);
+      setIsLoading(false);
+      onClose();
+    } catch (e: any) {
+      setError(e.response.data.message);
+      setIsLoading(false);
+    }
+  };
 
-  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setValue(e.target.value);
-  //   setError("");
-  // };
-  // const handleJoinChat = () => {
-  //   setJoinEnabled(true);
-  //   setCreateEnabled(false);
-  // };
-  const selectUser = (user: UserData) => setSelectedUser(user);
-
-  const handleCreateChat = async () => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+    setError("");
+  };
+  const handleJoinChat = () => {
+    setJoinEnabled(true);
+    setCreateEnabled(false);
+  };
+  const handleCreateChat = () => {
     setJoinEnabled(false);
     setCreateEnabled(true);
   };
@@ -74,7 +63,6 @@ export const NewChat = () => {
     setCreateEnabled(false);
     setIsLoading(false);
     setDisabled(false);
-    setSelectedUser(null);
     setValue("");
     setError("");
   };
@@ -82,27 +70,89 @@ export const NewChat = () => {
     setIsOpen(false);
     disableAll();
   };
-  const handleCancelSelectedUser = () => {
-    setSelectedUser(null);
-  };
   return (
     <>
       <Modal modalIsOpen={modalIsOpen}>
-        <section className="relative flex flex-col items-center justify-start gap-10 min-w-1/2 xl:w-1/4 lg:w-1/2 sm:w-1/2 md:w-1/2 h-1/2 py-4 pt-10 px-4 bg-wpp-green.100 rounded-2xl">
+        <section className="flex flex-col items-center justify-center gap-10 min-w-1/4 w-1/4 h-1/2 py-4 px-6 bg-wpp-green.100 rounded-2xl">
           <h2 className="text-white text-center font-thin text-sm sm:text-lg md:text-2xl">
-            Creá un nuevo chat!
+            {!joinEnabled && !createEnabled
+              ? "Creá un nuevo chat o unite a uno!"
+              : createEnabled
+              ? "Crear nuevo chat"
+              : "Unirse a un chat"}
           </h2>
-          <CreateChat
-            createEnabled={createEnabled}
-            handleCreateChat={handleCreateChat}
-            handleCreateRoom={handleCreateRoom}
-            selectedUser={selectedUser}
-            handleCancelSelectedUser={handleCancelSelectedUser}
-            disabled={disabled}
-            selectUser={selectUser}
-            error={error}
-          />
-          <div className="flex gap-5 absolute bottom-2">
+          <div className="flex flex-col gap-5">
+            {!joinEnabled && !createEnabled && (
+              <button
+                className="rounded-2xl bg-wpp-primary text-white p-2"
+                type="button"
+                onClick={handleCreateChat}
+              >
+                Crear chatroom nuevo
+              </button>
+            )}
+            {createEnabled && (
+              <form onSubmit={handleCreateRoom} className="container w-full">
+                <label htmlFor="value" className="text-gray-400 text-sm">
+                  Nombre de grupo
+                </label>
+                <div className="flex w-full">
+                  <input
+                    type="text"
+                    name="value"
+                    onChange={handleChange}
+                    value={value}
+                    disabled={disabled}
+                    placeholder="Nuevo grupo"
+                    className="p-1 focus:outline-none rounded-md rounded-tr-none rounded-br-none text-white bg-wpp-darkblue"
+                  ></input>
+                  <button
+                    className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1"
+                    type="button"
+                    onClick={handleCreateRoom}
+                    disabled={disabled}
+                  >
+                    Crear
+                  </button>
+                </div>
+                {error && <ErrorCard msg={error} />}
+              </form>
+            )}
+            {!joinEnabled && !createEnabled && (
+              <button
+                className="rounded-2xl bg-wpp-darkblue text-white p-2"
+                onClick={handleJoinChat}
+              >
+                Unirse a un chatroom
+              </button>
+            )}
+            {joinEnabled && (
+              <MainForm onSubmit={handleJoinRoom}>
+                <label htmlFor="roomCode" className="text-gray-400 text-sm">
+                  Código del room
+                </label>
+                <div className="flex w-full">
+                  <input
+                    type="text"
+                    name="roomCode"
+                    onChange={handleChange}
+                    disabled={disabled}
+                    value={value.toUpperCase()}
+                    placeholder="e.g AS456"
+                    className="p-1 focus:outline-none rounded-md rounded-tr-none rounded-br-none text-white bg-wpp-darkblue"
+                  ></input>
+                  <button
+                    className="rounded-md rounded-tl-none rounded-bl-none bg-wpp-primary text-white p-1"
+                    disabled={disabled}
+                  >
+                    Unirse
+                  </button>
+                </div>
+                {error && <ErrorCard msg={error} />}
+              </MainForm>
+            )}
+          </div>
+          <div className="flex gap-5">
             <button
               onClick={onClose}
               type="button"
