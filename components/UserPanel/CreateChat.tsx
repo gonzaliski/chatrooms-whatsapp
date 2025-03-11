@@ -89,7 +89,7 @@ export const CreateChat = ({
         </div>
       )}
       {createEnabled && (
-        <div className="container w-full">
+        <div className="container w-80">
           <label htmlFor="value" className="text-gray-400 text-sm">
             Buscar usuario
           </label>
@@ -115,33 +115,35 @@ export const CreateChat = ({
               </button>
             </div>
           </div>
-          <ul className="bg-wpp-green.300 text-white text-sm w-full overflow-clip">
-            {users.length === 0 && searchQuery ? (
-              <p>No se encontraron usuarios</p>
-            ) : (
-              users.map((user: UserData) => (
-                <li
-                  key={user.id}
-                  className=" p-1 border-b-1 border-wpp-green.100 hover:bg-wpp-darkblue"
-                >
-                  <button
-                    className="flex w-full gap-2 border-none hover:bg-wpp-darkblue"
-                    onClick={() => selectUser(user)}
+          {!selectedUser && (
+            <ul className="bg-wpp-green.300 text-white text-sm w-full text-clip max-h-44 overflow-auto">
+              {users.length === 0 && searchQuery ? (
+                <p>No se encontraron usuarios</p>
+              ) : (
+                users.map((user: UserData) => (
+                  <li
+                    key={user.id}
+                    className=" p-1 border-b-1 border-wpp-green.100 hover:bg-wpp-darkblue"
                   >
-                    <Image
-                      src={user.photoURL || defaultUser}
-                      className="object-cover w-[25px] h-[25px] rounded-full max-w-none cursor-pointer"
-                      width="100"
-                      height="100"
-                      alt="Profile image"
-                    />
-                    {user.username} -{" "}
-                    <p className="italic brightness-50">{user.name}</p>
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
+                    <button
+                      className="flex w-full gap-2 border-none hover:bg-wpp-darkblue"
+                      onClick={() => selectUser(user)}
+                    >
+                      <Image
+                        src={user.photoURL || defaultUser}
+                        className="object-cover w-[25px] h-[25px] rounded-full max-w-none cursor-pointer"
+                        width="100"
+                        height="100"
+                        alt="Profile image"
+                      />
+                      {user.username} -{" "}
+                      <p className="italic brightness-50">{user.name}</p>
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
           {error && <ErrorCard msg={error} />}
         </div>
       )}

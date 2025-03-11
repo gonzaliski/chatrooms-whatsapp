@@ -197,7 +197,7 @@ class UserService {
     }
   }
   // Función para buscar usuarios por nombre
-  async searchUsers(searchQuery: string): Promise<any> {
+  async searchUsers(searchQuery: string, userId: string): Promise<any> {
     try {
       // Accede a la colección "users"
       const usersRef = collection(db, "users");
@@ -206,7 +206,7 @@ class UserService {
       const usersQuery = query(
         usersRef,
         where("username", ">=", searchQuery), // Busca usuarios cuyo nombre comience con el searchQuery
-        where("username", "<=", searchQuery + "\uf8ff") // Realiza un rango de búsqueda
+        where("username", "<=", searchQuery + "\uf8ff")
       );
 
       const querySnapshot = await getDocs(usersQuery); // Obtiene los documentos que coinciden con la consulta
@@ -215,7 +215,7 @@ class UserService {
       querySnapshot.forEach((doc) => {
         users.push({ id: doc.id, ...doc.data() }); // Extrae la data y agrega el id
       });
-      return users;
+      return users.filter((u) => u.id !== userId);
     } catch (error) {
       console.error("Error al buscar usuarios: ", error);
       return [];
