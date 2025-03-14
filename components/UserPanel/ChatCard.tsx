@@ -4,6 +4,7 @@ import Image from "next/image";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { MdPhotoCamera } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { MessageTextRenderer } from "../RoomPanel/Conversation/MessageTextRenderer";
 
 export const ChatCard = ({
   roomId,
@@ -47,8 +48,10 @@ export const ChatCard = ({
               <MdPhotoCamera /> Imagen
             </div>
           ) : (
-            <div className="flex gap-1 items-center text-ellipsis">
-              {lastMessage.text}
+            <div className="flex gap-1 text-ellipsis">
+              {lastMessage.text && (
+                <MessageTextRenderer text={lastMessage.text} size="sm" />
+              )}
             </div>
           )}
         </span>

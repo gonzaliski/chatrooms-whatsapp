@@ -38,6 +38,7 @@ class ChatService {
                 photoURL: receiver.photoURL,
                 name: receiver.name,
               },
+              isSeen: true,
               timestamp,
             }),
           },
@@ -54,6 +55,7 @@ class ChatService {
                 photoURL: thisUser.photoURL,
                 name: thisUser.name,
               },
+              isSeen: false,
               timestamp,
             }),
           },
@@ -100,14 +102,6 @@ class ChatService {
           });
         }
       });
-
-      // Actualizar último mensaje en la sala
-      // const chatRef = ref(rtdb, `chats/${roomId}/info`);
-      // await update(chatRef, {
-      //   from: userId,
-      //   lastMessage: message,
-      //   lastTimestamp: Date.now(),
-      // });
     } catch (error) {
       console.error("Error enviando mensaje:", error);
     }
@@ -135,8 +129,13 @@ class ChatService {
           return { ...item, user };
         })
       );
+      const chatsWithoutEmptyMessage = chatData.filter(
+        (c) => c.lastMessage !== ""
+      );
 
-      callback(chatData.sort((a, b) => b.timestamp - a.timestamp));
+      callback(
+        chatsWithoutEmptyMessage.sort((a, b) => b.timestamp - a.timestamp)
+      );
     });
   }
   async markMessagesAsSeen(userId: string, chatId: string) {

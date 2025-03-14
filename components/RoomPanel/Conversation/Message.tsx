@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import defaultUser from "../../../public/deafultUserPhoto.jpg";
+import { MessageTextRenderer } from "./MessageTextRenderer";
 
 export const Message = ({
   incoming,
@@ -55,10 +56,12 @@ export const Message = ({
               width={100}
               height={100}
             />
-            {messageText && <p>{messageText}</p>}
+            {messageText && (
+              <MessageTextRenderer text={messageText} size={"md"} />
+            )}
           </>
         ) : (
-          <p>{messageText}</p>
+          <MessageTextRenderer text={messageText} size={"md"} />
         )}
         {prevIsFromOther && (
           <div

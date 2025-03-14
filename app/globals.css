@@ -27,6 +27,20 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --animate-pop: pop 1s ease-out;
+}
+@keyframes pop {
+  0% {
+    transform: translateY(60px) scale(0.1, 0.1);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(50px) scale(0.5, 0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,4 +67,15 @@ body {
     position: absolute;
     left: 0;
   }
+}
+
+.EmojiPickerReact.epr-dark-theme {
+  animation: pop 0.3s ease-out;
+  --epr-bg-color: #202c33;
+  --epr-category-label-bg-color: #202c33;
+  --epr-hover-bg-color: #2a3942;
+  --epr-search-input-bg-color: #2a3942;
+}
+img.epr-emoji-img {
+  display: inline;
 }

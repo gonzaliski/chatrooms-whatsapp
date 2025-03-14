@@ -1,6 +1,7 @@
 "use client";
 import useAutosizeTextArea from "@/hooks/autoSizeTextarea";
 import { FormEvent, useRef } from "react";
+import { MessageTextRenderer } from "./MessageTextRenderer";
 
 export const ConversationInput = ({
   value,

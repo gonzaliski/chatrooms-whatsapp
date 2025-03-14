@@ -10,6 +10,9 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { MdSend } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { ErrorCard } from "../../ErrorCard";
+import EmojiPicker, { Emoji, EmojiClickData, Theme } from "emoji-picker-react";
+import { MessageTextRenderer } from "./MessageTextRenderer";
+import { uid } from "uid";
 
 export const ConversationFooter = ({
   chatId,
@@ -20,13 +23,15 @@ export const ConversationFooter = ({
 }) => {
   const { file } = useSelector(imageSelector);
   const { id } = useSelector(userSelector);
-  const [value, setValue] = useState("");
+  const [text, setText] = useState("");
   const [img, setImg] = useState<Blob>();
   const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
+
   const dispatch = useDispatch();
   const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = evt.target?.value;
-    setValue(val);
+    setText(val);
   };
   const handleError = (e: string) => {
     setError(e);
@@ -37,8 +42,10 @@ export const ConversationFooter = ({
 
   const pushMessage = async (e: FormEvent) => {
     e.preventDefault();
-    const textValue = value;
-    setValue("");
+    const isOnlySpaces = (text: string): boolean => text.trim().length === 0;
+    if (isOnlySpaces(text) && !img) return;
+    const textValue = text;
+    setText("");
     try {
       let imgURL = "";
       if (img) {
@@ -57,6 +64,12 @@ export const ConversationFooter = ({
       }, 4000);
     }
   };
+  const handleEmoji = (e: EmojiClickData) => {
+    console.log(e);
+
+    setText((prev) => prev + e.emoji);
+    setOpen(false);
+  };
   useEffect(() => {
     if (!file) {
       setImg(undefined);
@@ -65,12 +78,23 @@ export const ConversationFooter = ({
   return (
     <>
       {!file ? (
-        <div className="inline-table min-h-[62px] bg-wpp-green.300 px-4 py-1">
+        <div className="relative inline-table min-h-[62px] bg-wpp-green.300 px-4 py-1">
           {error && <ErrorCard msg={error} />}
           <div className="flex items-center w-full">
             <div className="flex min-h-[52px] gap-3 py-1 px-2">
               <div className="flex  items-center">
-                <BsEmojiSmile className="text-gray-400 text-2xl" />
+                <BsEmojiSmile
+                  className="text-gray-400 text-2xl cursor-pointer hover:brightness-200"
+                  onClick={() => setOpen((prev) => !prev)}
+                />
+                <div className="absolute bottom-full z-10 animate-(--animate-pop)">
+                  <EmojiPicker
+                    lazyLoadEmojis={true}
+                    open={open}
+                    theme={Theme.DARK}
+                    onEmojiClick={handleEmoji}
+                  />
+                </div>
               </div>
               <div className="flex items-center">
                 <AttatchFile onError={handleError} onImg={setImg} />
@@ -78,7 +102,7 @@ export const ConversationFooter = ({
             </div>
             <form className="flex flex-center w-full" onSubmit={pushMessage}>
               <ConversationInput
-                value={value}
+                value={text}
                 onFill={handleChange}
                 onEnter={pushMessage}
               />
@@ -87,7 +111,7 @@ export const ConversationFooter = ({
             <div className="flex min-h-[52px] items-center py-1">
               <MdSend
                 className={`text-gray-400 text-2xl ${
-                  value ? "cursor-pointer" : "pointer-events-none"
+                  text ? "cursor-pointer" : "pointer-events-none"
                 } hover:brightness-200`}
                 onClick={pushMessage}
               />
@@ -106,7 +130,7 @@ export const ConversationFooter = ({
 
             <form className="flex flex-center w-full" onSubmit={pushMessage}>
               <ConversationInput
-                value={value}
+                value={text}
                 onFill={handleChange}
                 onEnter={pushMessage}
               />
